@@ -1,0 +1,82 @@
+/* Recompensas legíveis nas mãos dos personagens, com brilho e sombra de contato. */
+.held-potion{width:clamp(62px,7.5vw,96px);height:clamp(76px,10vw,116px);object-fit:contain;filter:drop-shadow(0 0 11px #ffe58b) drop-shadow(0 7px 6px #17100dcc);animation:rewardInHands .55s cubic-bezier(.2,.8,.25,1) both}
+.held-potion[data-reward-asset="amuletolobisohomem"]{width:clamp(66px,7vw,90px);height:clamp(66px,7vw,90px);clip-path:inset(0 0 12% 0)}
+@keyframes rewardInHands{0%{transform:scale(.45) rotate(-15deg)}65%{transform:scale(1.12) rotate(6deg)}100%{transform:scale(1) rotate(0)}}
+
+/* A carta e as recompensas mantêm pixels nítidos e alfa totalmente visível. */
+.chapter-scene .story-letter{z-index:25;mix-blend-mode:normal!important;opacity:0;filter:contrast(1.18) drop-shadow(2px 4px 0 #21140ecc) drop-shadow(0 0 7px #ffe39a66)}
+.chapter-scene .story-letter.visible,.chapter-scene .story-letter.in-hand{opacity:1!important}
+.chapter-scene .story-letter img,.reward-flight,.held-potion{image-rendering:pixelated;opacity:1!important}
+.chapter-scene .story-letter.visible{width:clamp(82px,8vw,112px)}
+.chapter-scene .story-letter.in-hand{width:clamp(70px,6vw,88px)}
+.chapter-scene .story-letter{transition:transform .7s,left .7s,top .7s,bottom .7s,width .7s!important}
+
+/* O mensageiro tem porte adulto, próximo à escala visual da Luna. */
+.chapter-scene .courier.entered{right:5%;bottom:1%;width:clamp(230px,27vw,345px);height:clamp(285px,40vh,430px);scale:-1 1}
+
+/* Controles só aparecem após o fim das falas e o início da etapa de escolha. */
+.chapter-scene:not(.controls-ready) #book,
+.chapter-scene:not(.controls-ready) #book-label,
+.chapter-scene:not(.controls-ready) #mix{display:none!important;visibility:hidden!important;pointer-events:none!important}
+.chapter-scene.controls-ready #book{display:block}
+@media(max-width:800px){
+  .chapter-scene .courier.entered{right:3%;bottom:1%;width:clamp(185px,44vw,285px);height:clamp(230px,50vh,350px);scale:-1 1}
+  .chapter-scene .story-letter.in-hand{width:clamp(58px,15vw,76px);left:31%;bottom:42%}
+}
+
+/* Falhas: a reação sobe do caldeirão e continua dentro da cena, sem quadro modal. */
+.failure-effect{position:absolute;z-index:19;inset:0;overflow:hidden;pointer-events:none;--fume-light:#eee0bf;--fume-mid:#9d7c55;--fume-dark:#443a35;--burst-color:#f5cb73}
+.failure-effect:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 83%,color-mix(in srgb,var(--fume-mid) 25%,transparent),transparent 54%);animation:failureScenePulse .65s steps(2,end) 2 both}
+.failure-smoke{position:absolute;left:50%;bottom:3%;width:100vw;height:100%;transform:translateX(-50%)}
+.failure-smoke i{position:absolute;left:50%;bottom:0;width:var(--puff-size);aspect-ratio:1;border:3px solid color-mix(in srgb,var(--fume-dark) 60%,transparent);border-radius:44% 53% 47% 50%;background:radial-gradient(ellipse at 35% 30%,var(--fume-light),var(--fume-mid) 48%,var(--fume-dark) 82%);box-shadow:inset -8px -10px 0 color-mix(in srgb,var(--fume-dark) 28%,transparent),0 5px 0 #251a1866;opacity:0;animation:failureSmokeRise 2.8s cubic-bezier(.2,.72,.24,1) var(--puff-delay) both;image-rendering:pixelated}
+.failure-smoke i:nth-child(1){--start-x:-26vw;--end-x:-30vw;--rise:53vh;--puff-size:clamp(110px,20vw,250px);--puff-delay:0s}
+.failure-smoke i:nth-child(2){--start-x:-16vw;--end-x:-19vw;--rise:66vh;--puff-size:clamp(130px,23vw,280px);--puff-delay:.14s}
+.failure-smoke i:nth-child(3){--start-x:-7vw;--end-x:-10vw;--rise:77vh;--puff-size:clamp(125px,22vw,270px);--puff-delay:.3s}
+.failure-smoke i:nth-child(4){--start-x:4vw;--end-x:2vw;--rise:70vh;--puff-size:clamp(135px,24vw,290px);--puff-delay:.08s}
+.failure-smoke i:nth-child(5){--start-x:14vw;--end-x:17vw;--rise:79vh;--puff-size:clamp(125px,23vw,280px);--puff-delay:.24s}
+.failure-smoke i:nth-child(6){--start-x:25vw;--end-x:28vw;--rise:61vh;--puff-size:clamp(115px,21vw,260px);--puff-delay:.38s}
+.failure-smoke i:nth-child(7){--start-x:-22vw;--end-x:-24vw;--rise:86vh;--puff-size:clamp(105px,18vw,230px);--puff-delay:.5s}
+.failure-smoke i:nth-child(8){--start-x:21vw;--end-x:23vw;--rise:91vh;--puff-size:clamp(105px,18vw,230px);--puff-delay:.58s}
+.failure-smoke i:nth-child(9){--start-x:-3vw;--end-x:-6vw;--rise:98vh;--puff-size:clamp(135px,25vw,300px);--puff-delay:.68s}
+.failure-smoke i:nth-child(10){--start-x:8vw;--end-x:11vw;--rise:104vh;--puff-size:clamp(130px,23vw,280px);--puff-delay:.8s}
+.failure-burst{position:absolute;left:50%;bottom:8%;width:clamp(110px,18vw,240px);aspect-ratio:1;border:7px solid var(--burst-color);border-radius:50%;box-shadow:0 0 0 12px color-mix(in srgb,var(--burst-color) 35%,transparent),0 0 35px var(--burst-color);opacity:0;transform:translateX(-50%) scale(.2);animation:failureBurst .8s ease-out both}
+.failure-burst i{position:absolute;left:50%;top:50%;width:18px;height:30px;background:var(--burst-color);clip-path:polygon(50% 0,100% 35%,65% 100%,0 65%);box-shadow:0 0 12px var(--burst-color);transform:rotate(calc(var(--shard-index)*45deg)) translateY(-72px);animation:failureShard .7s ease-out both}
+.failure-burst i:nth-child(1){--shard-index:0}.failure-burst i:nth-child(2){--shard-index:1}.failure-burst i:nth-child(3){--shard-index:2}.failure-burst i:nth-child(4){--shard-index:3}
+.failure-chapter-1{--fume-light:#f5ecd6;--fume-mid:#9c9990;--fume-dark:#56555a;--burst-color:#c5c8cb}
+.failure-chapter-2{--fume-light:#b2d8a2;--fume-mid:#668447;--fume-dark:#303c35;--burst-color:#b8de83}
+.failure-chapter-3{--fume-light:#f1fbff;--fume-mid:#8fc7df;--fume-dark:#456c91;--burst-color:#d9f5ff}
+.failure-chapter-4{--fume-light:#ffe58a;--fume-mid:#e08b28;--fume-dark:#8d451d;--burst-color:#ffe16e}
+.failure-chapter-5{--fume-light:#efb4fa;--fume-mid:#874a9d;--fume-dark:#392447;--burst-color:#e6a2f2}
+.failure-chapter-6{--fume-light:#d4d3cb;--fume-mid:#777773;--fume-dark:#393a3d;--burst-color:#ded7bf}
+.failure-chapter-7{--fume-light:#e7b8ff;--fume-mid:#8e48b0;--fume-dark:#382045;--burst-color:#d299f3}
+.failure-scene-3 .guest.cartoon-hit{filter:brightness(1.18) saturate(.65) drop-shadow(0 0 18px #d5f6ff)!important}
+.failure-scene-4 .failure-smoke{width:125vw}
+.failure-scene-4 .failure-smoke i{border-width:5px;box-shadow:inset -15px -14px 0 #813d2588,0 8px 0 #4b251777}
+.failure-chapter-4:before{background:radial-gradient(ellipse at 52% 69%,#f0a43288,#6b391355 73%);animation:toxicMistWash .72s steps(2,end) 4 both}
+.failure-scene-6 .failure-burst{border-radius:8px;transform:translateX(-50%) rotate(45deg) scale(.2)}
+.failure-scene-7 .failure-smoke i{border-radius:50%;border-width:5px;background:radial-gradient(circle at 35% 30%,#f4daff,#b05bd0 54%,#52266e 88%);box-shadow:inset -10px -12px 0 #481e5c88,0 8px 0 #23112788}
+@keyframes failureSmokeRise{0%{opacity:0;transform:translate(calc(-50% + var(--start-x)),10vh) scale(.18)}14%{opacity:.92}70%{opacity:.88;transform:translate(calc(-50% + var(--end-x)),calc(0px - var(--rise))) scale(1.24)}100%{opacity:0;transform:translate(calc(-50% + var(--end-x)),calc(0px - var(--rise) - 14vh)) scale(1.75)}}
+@keyframes failureBurst{0%{opacity:0;transform:translateX(-50%) scale(.15)}30%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(1.35)}}
+@keyframes failureShard{0%{opacity:1}100%{opacity:0;transform:rotate(calc(var(--shard-index)*45deg)) translateY(-140px) scale(.35)}}
+@keyframes failureScenePulse{0%,100%{opacity:0}35%{opacity:.85}}
+@keyframes toxicMistWash{0%{opacity:0}32%{opacity:.82}100%{opacity:.5}}
+@media(max-width:800px){.failure-smoke{width:125vw}.failure-smoke i{border-width:2px}.failure-burst{bottom:9%}}
+
+/* O vestido veste a silhueta e passa atrás das mãos, mangas, cabeça e botas. */
+.chapter-scene .luna.dress-arrival{animation:dressWearBeat .82s steps(6,end) both!important;filter:drop-shadow(0 0 11px #ffb7e688) drop-shadow(0 10px 6px #10090799)}
+.chapter-scene .luna.dressed{image-rendering:pixelated;filter:drop-shadow(0 0 5px #ffb7e633) drop-shadow(0 10px 6px #10090799)}
+@keyframes dressWearBeat{0%{transform:scaleX(-1) translateY(4px) scale(.97);filter:brightness(1.25) drop-shadow(0 0 15px #ffe89a)}35%{transform:scaleX(-1) translateY(-7px) scale(1.02)}70%{transform:scaleX(-1) translateY(2px) scale(.995)}100%{transform:scaleX(-1) translateY(0) scale(1)}}
+
+/* A folha encosta no desenho da porta: o batente termina junto ao piso da casa. */
+.prologue-doorway{bottom:12%;transform-origin:4% 50%}
+.prologue-cutscene.courier-knocks .prologue-doorway{animation:doorKnockGrounded .32s ease-in-out 2}
+.prologue-cutscene.door-opens .prologue-doorway{transform:translateX(-50%) perspective(200px) rotateY(-72deg)}
+.prologue-doorlight{bottom:10%}
+.prologue-knock{bottom:26%}
+@keyframes doorKnockGrounded{0%,100%{transform:translateX(-50%) rotateY(0)}45%{transform:translateX(calc(-50% + 2px)) rotateY(2deg)}}
+@media(max-width:800px){
+  .prologue-doorway{bottom:13%}
+  .prologue-doorlight{bottom:11%}
+  .prologue-knock{bottom:26%}
+  .prologue-cutscene.courier-knocks .prologue-doorway{animation-name:doorKnockGrounded}
+}

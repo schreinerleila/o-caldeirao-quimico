@@ -1,0 +1,42 @@
+/* Grimório aberto em duas páginas: missão à esquerda, tabela completa à direita. */
+.outside-mix{display:none!important}
+.chapter-scene.book-open .outside-mix{display:block!important;position:static;left:auto;bottom:auto;min-width:0;width:100%;margin-top:16px;padding:12px 16px;transform:none;border:2px solid #4c3021;border-radius:7px;background:linear-gradient(#8b5740,#62352d);box-shadow:0 4px #2e1916;color:#fae8b8;font:22px var(--pixel)}
+.chapter-scene.book-open .outside-mix.ready{animation:mixGlowPage 1.2s ease-in-out infinite alternate}
+.booklayer.open{position:absolute;z-index:30;inset:58px 0 0;display:block;overflow:auto;padding:1vh 1.5vw;background:#160e0bd9;backdrop-filter:blur(4px)}
+.booklayer.open .grimoire{position:relative!important;top:auto!important;right:auto!important;left:auto!important;width:min(1540px,97vw)!important;min-width:980px;height:min(900px,calc(98svh - 58px));margin:0 auto;display:grid!important;grid-template-columns:minmax(280px,.62fr) minmax(0,1.8fr);align-items:stretch;transform:none!important;filter:drop-shadow(0 15px 24px #090605bb)}
+.booklayer .page{min-width:0;height:100%;overflow:auto;padding:clamp(20px,2.3vw,36px);background:linear-gradient(105deg,#d4b782,#f7eac4 12%,#edd7a4 94%,#c49c62)}
+.booklayer .recipe-page{display:block!important;border-radius:20px 0 0 20px;box-shadow:inset -12px 0 #8d683f,0 2px 8px #27170d55}
+.booklayer .table-page{border-radius:0 20px 20px 0;border-left:3px solid #8d683f;box-shadow:inset 12px 0 #8d683f;background:linear-gradient(105deg,#e0c389,#f7eac4 12%,#edd7a4 94%,#c49c62)}
+.booklayer .close{left:16px;right:auto;top:14px}
+.booklayer .recipe-page h2,.booklayer .table-page h2{font:24px/1.1 var(--pixel);padding:0 36px 0 0;margin:0 0 15px;color:#642e31}
+.booklayer .recipe-page h3{font:21px/1.1 var(--pixel);margin:18px 0 4px;color:#704638}
+.booklayer .recipe-page .ink{font:19px/1.15 var(--pixel);margin:5px 0;color:#583a29}
+.booklayer .recipe-page .eyebrow,.booklayer .table-page .eyebrow{font:18px/1.1 var(--pixel);margin:0 0 10px}
+.booklayer .map-hint{font:18px/1.1 var(--pixel);margin:0 0 12px}
+.booklayer .periodic{width:100%;min-width:1010px;grid-template-columns:repeat(18,minmax(48px,1fr));grid-template-rows:repeat(9,minmax(66px,1fr));gap:6px;margin:14px 0}
+.booklayer .element{min-height:66px;padding:5px 3px 4px;border-radius:7px}
+.booklayer .element .n{font:13px/1 var(--pixel)}
+.booklayer .element b{font:24px/1 var(--pixel)}
+.booklayer .element small{font:12px/1 var(--pixel);letter-spacing:0}
+.booklayer .element .element-mass{font-size:11px}
+.booklayer .ingredient-tray{position:static;left:auto;bottom:auto;transform:none;min-height:52px;display:flex;justify-content:flex-start;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 0}
+.booklayer .ingredient-tray:empty:after{content:'Nenhum ingrediente escolhido';font:17px var(--pixel);color:#674c36}
+.booklayer .info{min-height:72px;margin-top:10px;padding:12px;font:18px/1.2 var(--pixel)}
+.mix-note{font:16px/1.15 var(--pixel);color:#674c36}
+@keyframes mixGlowPage{to{filter:brightness(1.3);box-shadow:0 0 18px #f4d987,0 4px #2e1916}}
+
+/* A porta acompanha o batente pintado, inclusive no enquadramento móvel. */
+.prologue-doorway{left:46%;bottom:17%;width:clamp(43px,6vw,78px);height:clamp(65px,12vh,125px);transform:translateX(-50%);transform-origin:4% 50%}
+.prologue-cutscene.courier-knocks .prologue-doorway{animation:doorKnockAligned .32s ease-in-out 2}
+.prologue-cutscene.door-opens .prologue-doorway{transform:translateX(-50%) perspective(200px) rotateY(-72deg)}
+.prologue-doorlight{left:46%;bottom:14%}.prologue-knock{left:47%;bottom:31%}
+@keyframes doorKnockAligned{0%,100%{transform:translateX(-50%) rotateY(0)}45%{transform:translateX(calc(-50% + 2px)) rotateY(2deg)}}
+@media(max-width:800px){
+  .booklayer.open{padding:1vh 2vw}
+  .booklayer.open .grimoire{width:1180px!important;min-width:1180px;height:calc(98svh - 58px);grid-template-columns:300px 880px;margin:0}
+  .booklayer .page{padding:22px 17px}
+  .booklayer .periodic{min-width:1010px;grid-template-columns:repeat(18,minmax(48px,1fr));gap:5px}
+  .booklayer .element{min-height:62px}
+  .prologue-doorway{left:40%;bottom:13%;width:clamp(38px,12vw,54px);height:9vh;transform:translateX(-50%);transform-origin:4% 50%}
+  .prologue-doorlight{left:40%;bottom:11%}.prologue-knock{left:42%;bottom:26%}
+}
