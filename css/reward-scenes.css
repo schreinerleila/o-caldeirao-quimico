@@ -191,3 +191,11 @@
 @keyframes snowAlmostMelt{0%{transform:scaleY(1) translateY(0)}50%{transform:scaleY(.9) skewX(-1.5deg) translateY(5px)}100%{transform:scaleY(.83) skewX(2deg) translateY(9px)}}
 @keyframes iceSteam{from{opacity:.18;transform:translateY(8px) scale(.7)}to{opacity:.9;transform:translateY(-22px) scale(1.16)}}
 @media(max-width:800px){.speech.guest-outcome{top:clamp(78px,10vh,104px)!important;width:94vw!important}}
+
+/* O livro acompanha o centro e a altura do caldeirão na bancada. */
+.chapter-scene #book{left:50%;translate:-50% 0;bottom:calc(3% + clamp(180px,19vw,260px) + 42px);width:clamp(88px,8vw,112px);height:clamp(88px,8vw,112px)}
+.chapter-scene #book-label{left:50%;translate:-50% 0;bottom:calc(3% + clamp(180px,19vw,260px) + 7px);white-space:nowrap}
+@media(max-width:800px){
+  .chapter-scene #book{bottom:calc(4% + clamp(140px,39vw,230px) + 42px);width:clamp(72px,15vw,96px);height:clamp(72px,15vw,96px)}
+  .chapter-scene #book-label{bottom:calc(4% + clamp(140px,39vw,230px) + 7px)}
+}
