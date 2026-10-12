@@ -80,3 +80,114 @@
   .prologue-knock{bottom:26%}
   .prologue-cutscene.courier-knocks .prologue-doorway{animation-name:doorKnockGrounded}
 }
+
+/* O foco acompanha cada trecho narrado no cartão de Carbono. */
+.tutorial-scene .focus-card [data-field]{position:relative;display:table;width:max-content;max-width:100%;margin-inline:auto;transition:color .2s,filter .2s,text-shadow .2s,transform .2s}
+.tutorial-scene .focus-card [data-field="atomic"]{margin-left:0}
+.tutorial-scene .focus-card [data-field]:before{content:attr(data-label);display:block;margin-bottom:1px;color:#674a30;font:11px/1 var(--pixel)}
+.tutorial-scene .focus-card [data-field].field-active{z-index:2;color:#fff1a1;filter:brightness(1.35);text-shadow:0 0 4px #fff4b5,0 0 13px #ffcc55,2px 2px #563818;transform:scale(1.12)}
+.tutorial-scene .focus-card [data-field].field-active:after{content:'✦';position:absolute;right:-.85em;top:-.5em;color:#fff5bb;font:700 16px/1 var(--pixel,monospace);text-shadow:0 0 9px #ffe16b;animation:fieldSparkle .7s steps(2,end) infinite}
+.tutorial-scene .focus-card[data-highlight="overview"]{filter:drop-shadow(0 0 14px #ffd76a)}
+.tutorial-scene .focus-card{z-index:26!important;visibility:visible!important;opacity:1!important;transform:scale(1)!important;pointer-events:none}
+.phase-element-card{position:absolute;z-index:26;top:clamp(86px,15vh,150px);right:clamp(18px,5vw,72px);display:none;width:clamp(142px,14vw,190px);min-height:184px;padding:11px 13px;background:linear-gradient(145deg,#fff0c8,#d8bd80);border:4px solid #6d5032;box-shadow:5px 7px #1d120e88,0 0 22px #ffd76a55;text-align:center;color:#382617;image-rendering:pixelated}
+.phase-element-card{right:auto;transition:left .2s ease,top .2s ease}
+.phase-element-card.visible{display:grid;align-content:space-between;animation:elementCardReveal .35s steps(4,end) both}
+.phase-element-card span,.phase-element-card b,.phase-element-card strong,.phase-element-card em{display:block;font-style:normal}
+.phase-element-card span{font:700 17px var(--pixel,monospace);text-align:left}
+.phase-element-card b{font:900 49px/1 var(--book,serif)}
+.phase-element-card strong{font:700 16px var(--book,serif)}
+.phase-element-card em{font:italic 14px var(--book,serif)}
+.phase-element-card small{display:block;margin-bottom:2px;color:#775735;font:8px/1.2 var(--pixel,monospace)}
+.phase-element-card [data-field].field-active{position:relative;z-index:1;color:#fff1a1;text-shadow:0 0 5px #fff4b5,0 0 14px #ffbd40,2px 2px #563818;filter:brightness(1.2);transform:scale(1.08)}
+.phase-element-card [data-field].field-active:after{content:'✦';position:absolute;margin-left:5px;color:#fff5bb;font:700 14px/1 var(--pixel,monospace);text-shadow:0 0 9px #ffe16b;animation:fieldSparkle .7s steps(2,end) infinite}
+@keyframes elementCardReveal{from{opacity:0;transform:translateY(-8px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:800px){.phase-element-card{top:clamp(72px,12vh,108px);right:4%;width:104px;min-height:142px;padding:7px;border-width:3px}.phase-element-card span{font-size:13px}.phase-element-card b{font-size:39px}.phase-element-card strong{font-size:12px}.phase-element-card em{font-size:11px}.phase-element-card small{font-size:7px}}
+@keyframes fieldSparkle{0%,100%{opacity:.35;transform:scale(.6) rotate(0)}50%{opacity:1;transform:scale(1.3) rotate(22deg)}}
+
+/* Toda mistura errada começa com o clarão no caldeirão; a fumaça vem depois. */
+.failure-effect.boom-phase .failure-smoke{visibility:hidden}
+.failure-effect.consequence-phase .failure-smoke{visibility:visible}
+.failure-burst{left:40%;bottom:8%;transform:translateX(-50%) scale(.2)}
+.failure-effect.boom-phase .failure-burst{animation:cauldronBum .76s steps(5,end) both}
+.failure-effect:not(.boom-phase) .failure-burst{display:none}
+.failure-bum{position:absolute;z-index:2;left:40%;bottom:18%;color:#fff2a4;font:1000 clamp(28px,5vw,68px)/1 var(--pixel,monospace);letter-spacing:.04em;-webkit-text-stroke:2px #693c20;text-shadow:4px 5px 0 #342018,0 0 18px #ffbd45;opacity:0;transform:translate(-50%,12px) rotate(-9deg) scale(.25);animation:bumPop .76s steps(5,end) both}
+.failure-effect.consequence-phase .failure-bum{animation:bumFade .32s ease-in forwards}
+.failure-smoke{transform:translateX(calc(-50% - 10vw))}
+.failure-smoke i{animation-play-state:paused}
+.failure-effect.consequence-phase .failure-smoke i{animation-play-state:running}
+.failure-effect.consequence-phase.failure-chapter-4:before{background:radial-gradient(ellipse at 52% 69%,#f0a43288,#6b391355 73%);animation:toxicMistWash .72s steps(2,end) 4 both}
+.failure-effect.boom-phase.failure-chapter-4:before{background:radial-gradient(ellipse at 40% 78%,#ffe16e88,transparent 40%);animation:failureScenePulse .65s steps(2,end) both}
+@keyframes cauldronBum{0%{opacity:0;transform:translateX(-50%) scale(.2)}22%{opacity:1;transform:translateX(-50%) scale(.82)}45%{opacity:1;transform:translateX(-50%) scale(1.08)}100%{opacity:0;transform:translateX(-50%) scale(1.35)}}
+@keyframes bumPop{0%{opacity:0;transform:translate(-50%,12px) rotate(-9deg) scale(.25)}25%{opacity:1;transform:translate(-50%,-7px) rotate(8deg) scale(1.12)}70%{opacity:1;transform:translate(-50%,0) rotate(-4deg) scale(1)}100%{opacity:0;transform:translate(-50%,-20px) rotate(5deg) scale(.82)}}
+@keyframes bumFade{to{opacity:0}}
+
+/* A forma de Pinscher aparece após o estouro e volta ao lobisomem ao reabrir o livro. */
+.chapter-scene .guest.pincher-form{width:clamp(72px,9vw,126px);height:auto;object-fit:contain;opacity:1!important;visibility:visible!important;mix-blend-mode:normal!important;image-rendering:pixelated;filter:drop-shadow(0 4px 3px #160e0c99)!important}
+@media(max-width:800px){.failure-burst,.failure-bum{left:40%}.chapter-scene .guest.pincher-form{width:clamp(62px,20vw,92px);height:auto}}
+.failure-effect{position:fixed;z-index:100;inset:0;width:100vw;height:100vh;height:100dvh;overflow:hidden}
+.failure-effect.boom-phase:before{inset:0;background:#fce28c;animation:boomScreenWash 2.9s steps(6,end) both}
+.failure-effect.boom-phase .failure-burst,.failure-effect.boom-phase .failure-bum{display:none}
+.boom-animation{position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;height:100dvh;object-fit:cover;opacity:0;transform:scale(.22);filter:drop-shadow(0 8px 0 #25140dcc);image-rendering:pixelated;pointer-events:none}
+.failure-effect.boom-phase .boom-animation{animation:fullScreenBoomSlow 2.9s steps(8,end) both}
+@keyframes fullScreenBoomSlow{0%{opacity:0;transform:scale(.22)}14%{opacity:1;transform:scale(.52)}54%{opacity:1;transform:scale(1.04)}82%{opacity:1;transform:scale(1.08)}100%{opacity:0;transform:scale(1.2)}}
+@keyframes boomScreenWash{0%{opacity:0}12%,58%{opacity:1}100%{opacity:0}}
+.chapter-scene #book.retry-pulse,.chapter-scene #book-label.retry-pulse{animation:retryBookPulse .8s steps(2,end) infinite;filter:drop-shadow(0 0 12px #ffe276) drop-shadow(3px 5px 3px #170e0c)}
+.chapter-scene #book-label.retry-pulse{box-shadow:0 0 0 3px #ffe276,0 0 18px #ffc744;background:#fff0b2}
+@keyframes retryBookPulse{50%{transform:translateY(-5px) scale(1.1);filter:brightness(1.35) drop-shadow(0 0 18px #ffe276)}}
+.speech.failure-reaction{z-index:24;left:50%;top:clamp(68px,9vh,104px);bottom:auto;width:min(820px,92%);padding:14px 20px;background:linear-gradient(135deg,#171323f5,#272039ed);border:2px solid #e4c886;border-radius:14px;color:#fff0ca;box-shadow:0 8px 28px #08070bcc,0 5px #0c0813;transform:translateX(-50%);animation:failureReactionIn .32s ease-out both}
+.speech.failure-reaction .speaker{color:#f1d48e}
+.speech.failure-reaction p{font-family:var(--pixel);font-size:clamp(17px,1.8vw,24px);line-height:1.25;font-weight:400}
+.speech.failure-reaction:after{display:none}
+@keyframes failureReactionIn{from{opacity:0;transform:translate(-50%,-10px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* A armadura se assenta no tronco no sucesso e cai em placas no erro. */
+.chapter-scene .hero.armor-fitting{animation:frankFitPose .24s steps(2,end) 3}
+.chapter-scene .frank-armor.armor-fitted{filter:drop-shadow(0 0 9px #9fe9ff) drop-shadow(0 5px 4px #130b08aa)}
+.armor-breakup{position:absolute;z-index:21;pointer-events:none;filter:drop-shadow(2px 4px 1px #100b0bbb)}
+.armor-breakup i{position:absolute;width:36%;height:35%;border:2px solid #d7f6ff;background:linear-gradient(135deg,#ecffff 0 18%,#81c8dd 19% 42%,#447da1 43% 78%,#244d71 79%);clip-path:polygon(15% 0,84% 7%,100% 58%,68% 100%,0 75%);image-rendering:pixelated}
+.armor-breakup i:nth-child(1){left:3%;top:3%}.armor-breakup i:nth-child(2){left:32%;top:0}.armor-breakup i:nth-child(3){left:61%;top:4%}.armor-breakup i:nth-child(4){left:0;top:34%}.armor-breakup i:nth-child(5){left:31%;top:35%}.armor-breakup i:nth-child(6){left:62%;top:34%}.armor-breakup i:nth-child(7){left:30%;top:66%}
+@keyframes frankFitPose{0%,100%{transform:translateY(0) scaleX(1)}50%{transform:translateY(-4px) scaleX(.985)}}
+
+/* A floresta fornecida substitui as árvores desenhadas na abertura e nas chegadas. */
+.prologue-forest{background:linear-gradient(180deg,#111a2c55 0%,#1c2a2033 62%,#18251a40 100%),url('../static/images/forest.png') center 56%/cover no-repeat}
+.prologue-forest .forest-tree,.prologue-path{display:none}
+.arrival-stage{background:linear-gradient(180deg,#111a2c66,#1a291c33 70%,#17241744),url('../static/images/forest.png') center 56%/cover no-repeat!important}
+.arrival-sky{background:linear-gradient(180deg,#101a2d44 0%,#26334b22 48%,#34432b33 100%);animation:arrivalNight 4.6s ease both}
+.arrival-trees{background:none}
+.arrival-trees i,.arrival-path{display:none}
+
+/* Falas permanecem acima das cabeças e avançam com toque em qualquer área da cena. */
+.chapter-scene .speech,.tutorial-scene .speech{z-index:24}
+.speech[role="button"]{cursor:pointer;touch-action:manipulation}
+.speech[role="button"]:focus-visible{outline:3px solid #f5cc67;outline-offset:4px}
+.prologue-dialogue{top:auto}
+.story-letter img{display:block;width:100%;height:auto;object-fit:contain;opacity:1!important;mix-blend-mode:normal!important;image-rendering:pixelated}
+
+/* O Carbono fica ao lado do texto e cada valor brilha no próprio campo. */
+.story .tutorial-scene .speech{left:43%;right:calc(8% + 168px);top:16%;bottom:auto;width:auto;transform:none}
+.story .tutorial-scene .focus-card{left:auto;right:8%;top:14%;width:152px;height:184px;transform:scale(.95);opacity:1}
+.tutorial-scene .focus-card.zoomed{transform:scale(1.06)}
+.tutorial-scene .focus-card [data-field="mass"]:after{right:-1em}
+@media(max-width:800px){
+  .story .tutorial-scene .speech{left:4%;right:calc(8% + 112px);top:13%;bottom:auto;width:auto;transform:none;padding:11px 12px}
+  .story .tutorial-scene .focus-card{right:4%;top:13%;width:104px;height:146px;padding:8px;transform:scale(1)}
+  .tutorial-scene .focus-card.zoomed{transform:scale(1.04)}
+  .tutorial-scene .focus-card strong{font-size:38px}
+  .tutorial-scene .focus-card small{font-size:11px}
+  .tutorial-scene .focus-card em{font-size:10px}
+  .tutorial-scene .focus-card [data-field]:before{font-size:9px}
+}
+
+/* Warm the Ice Man safely on success; show steam and a shrinking pose on error. */
+.mix-cinematic.success.snow-warmth{background:radial-gradient(ellipse at 78% 50%,#ffd88848,transparent 42%);pointer-events:none}
+.mix-cinematic.success.snow-warmth .success-aura{background:radial-gradient(ellipse at 78% 53%,#fff0b9a8 0,#ffc86a6b 17%,#f2a75030 34%,transparent 51%);animation:snowWarmthPulse 1.7s ease-in-out both}
+.speech.guest-outcome{z-index:45;top:clamp(80px,10vh,118px)!important;bottom:auto!important;left:50%!important;width:min(760px,90vw)!important;transform:translateX(-50%)!important}
+.speech.guest-outcome:after{display:none}
+.chapter-scene .guest.melting{transform-origin:center bottom;animation:snowAlmostMelt 1.25s ease-in-out infinite alternate!important;filter:saturate(.62) brightness(1.18) sepia(.12) drop-shadow(0 0 16px #d8f8ff)!important}
+.melting-vapor{position:absolute;z-index:8;height:clamp(44px,8vw,90px);pointer-events:none}
+.melting-vapor i{position:absolute;bottom:0;width:30%;aspect-ratio:1;border:2px solid #dffbff99;border-radius:50%;background:radial-gradient(circle at 38% 32%,#ffffffdd,#c9f4f680 58%,transparent 73%);filter:blur(1px);animation:iceSteam .9s ease-in-out infinite alternate}
+.melting-vapor i:nth-child(1){left:5%;bottom:4%;animation-delay:-.4s}.melting-vapor i:nth-child(2){left:36%;bottom:21%;animation-delay:-.1s}.melting-vapor i:nth-child(3){right:5%;bottom:0;animation-delay:-.65s}
+@keyframes snowWarmthPulse{0%{opacity:0;transform:scale(.7)}40%{opacity:1}100%{opacity:.72;transform:scale(1.08)}}
+@keyframes snowAlmostMelt{0%{transform:scaleY(1) translateY(0)}50%{transform:scaleY(.9) skewX(-1.5deg) translateY(5px)}100%{transform:scaleY(.83) skewX(2deg) translateY(9px)}}
+@keyframes iceSteam{from{opacity:.18;transform:translateY(8px) scale(.7)}to{opacity:.9;transform:translateY(-22px) scale(1.16)}}
+@media(max-width:800px){.speech.guest-outcome{top:clamp(78px,10vh,104px)!important;width:94vw!important}}

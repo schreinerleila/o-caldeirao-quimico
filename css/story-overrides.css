@@ -272,6 +272,24 @@
   .speech.speech-narrator{top:clamp(64px,8vh,88px)!important}
 }
 
+/* Final dragon framing and dialogue layer, after all legacy scene rules. */
+.chapter-scene .hero.dragon-guest{right:1.5%;bottom:12%;width:clamp(460px,46vw,620px);height:clamp(410px,62vh,660px);object-fit:contain;object-position:center bottom;z-index:6}
+.chapter-scene.dragon-scene .pot-wrap{z-index:7}
+.chapter-scene.dragon-scene .speech{top:clamp(82px,11vh,128px)!important;bottom:auto!important;left:50%!important;width:min(760px,88vw)!important;transform:translateX(-50%)!important;z-index:14}
+.chapter-scene.dragon-scene .speech:after{display:none}
+@media(max-width:800px){
+  .chapter-scene .hero.dragon-guest{right:-1%;bottom:18%;width:clamp(300px,78vw,440px);height:clamp(300px,48vh,430px)}
+  .chapter-scene.dragon-scene .speech{top:clamp(78px,10vh,105px)!important;width:94vw!important}
+}
+
+/* A short camera-like move from the conversation to the alchemy bench. */
+.chapter-scene .room-art{transition:transform .95s cubic-bezier(.2,.7,.2,1),filter .95s ease}
+.chapter-scene.lesson-transition .room-art{transform:scale(1.07);filter:brightness(.68) saturate(1.12)}
+.chapter-scene.lesson-transition .pot-wrap{transform:translateX(-50%) scale(1.12);bottom:20%;filter:drop-shadow(0 0 24px #f6d16a88)}
+.chapter-scene.lesson-transition .hero{filter:brightness(.82) drop-shadow(0 10px 8px #100907aa);transition:filter .7s ease}
+.chapter-scene.lesson-transition:after{animation:lessonCameraGlow .95s ease-in-out both}
+@keyframes lessonCameraGlow{0%,100%{opacity:.1}45%{opacity:.72}}
+
 /* Overrides finais para o livro de duas páginas e o botão contextual. */
 .outside-mix{display:none!important}
 .chapter-scene.book-open .outside-mix{display:block!important;position:static;left:auto;bottom:auto;min-width:0;width:100%;margin-top:16px;padding:12px 16px;transform:none;border:2px solid #4c3021;border-radius:7px;background:linear-gradient(#8b5740,#62352d);box-shadow:0 4px #2e1916;color:#fae8b8;font:22px var(--pixel)}
@@ -295,6 +313,59 @@
 .booklayer .element .element-mass{font-size:11px}
 .booklayer .ingredient-tray{position:static;left:auto;bottom:auto;transform:none;min-height:52px;display:flex;justify-content:flex-start;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 0}
 .booklayer .ingredient-tray:empty:after{content:'Nenhum ingrediente escolhido';font:17px var(--pixel);color:#674c36}
+
+/* The certificate is a terminal scene: keep every alchemy control out of it. */
+.chapter-scene.game-complete #book,
+.chapter-scene.game-complete #book-label,
+.chapter-scene.game-complete #mix,
+.chapter-scene.game-complete #ingredient-tray,
+.chapter-scene.game-complete #layer,
+.chapter-scene.game-complete #phase-element-card{display:none!important;visibility:hidden!important;pointer-events:none!important}
+
+/* Player name registration on the title screen. */
+.player-registration{
+  flex:1 0 100%;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:9px;
+  width:min(500px,92vw);
+  padding:12px;
+  border:3px solid #d6b878;
+  background:linear-gradient(135deg,#24172deF,#382544ed);
+  box-shadow:0 5px #120b18,0 9px 20px #10081388;
+}
+.player-registration label{grid-column:1/-1;color:#f6df9c;font:clamp(15px,1.45vw,20px) var(--pixel);text-align:center;text-shadow:2px 2px #261628}
+.player-registration input{min-width:0;width:100%;padding:10px 12px;border:2px solid #9f8050;border-radius:3px;background:#f5e7c3;color:#402a1d;font:clamp(13px,1.2vw,17px) var(--pixel);box-shadow:inset 0 2px 4px #523a2455}
+.player-registration input::placeholder{color:#806d52;opacity:1}
+.player-registration input:focus-visible{outline:3px solid #f2d36e;outline-offset:2px}
+.player-registration .start-button{margin:0;white-space:nowrap}
+@media(max-width:520px){
+  .player-registration{grid-template-columns:1fr;padding:10px;gap:7px}
+  .player-registration label{grid-column:1}
+  .player-registration .start-button{justify-self:center}
+}
+
+/* Keep both dragon forms imposing while fitting fully inside the scene. */
+.chapter-scene .hero.dragon-guest{
+  right:1.5%;
+  bottom:8%;
+  width:clamp(460px,46vw,620px);
+  height:clamp(410px,62vh,660px);
+  object-fit:contain;
+  object-position:center bottom;
+  z-index:4;
+}
+.chapter-scene .hero.dragon-guest.dragon-red{right:1.5%;bottom:8%}
+@media(max-width:800px){
+  .chapter-scene .hero.dragon-guest{
+    right:-1%;
+    bottom:15%;
+    width:clamp(300px,78vw,440px);
+    height:clamp(300px,48vh,430px);
+  }
+  .chapter-scene .hero.dragon-guest.dragon-red{right:-1%;bottom:15%}
+}
 .booklayer .info{min-height:72px;margin-top:10px;padding:12px;font:18px/1.2 var(--pixel)}
 .mix-note{font:16px/1.15 var(--pixel);color:#674c36}
 @media(max-width:800px){.booklayer.open{padding:1vh 2vw}.booklayer.open .grimoire{width:1180px!important;min-width:1180px;height:98vh;grid-template-columns:300px 880px;margin:0}.booklayer .page{padding:22px 17px}.booklayer .periodic{min-width:1010px;grid-template-columns:repeat(18,minmax(48px,1fr));gap:5px}.booklayer .element{min-height:62px}}

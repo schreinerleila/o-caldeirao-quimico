@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" shape-rendering="crispEdges">
+  <path fill="#421d31" d="M221 8h40v24h32v32h32v32h32v32h32v48h-32v32h-32v32h-32v32h-32v32h-48v-24h-32v-32h-32v-32H85v-32H53v-48h32v-32h32v-32h32V72h32V40h40z"/>
+  <path fill="#c74832" d="M221 24h40v24h32v32h32v32h32v32h24v32h-24v32h-32v32h-32v24h-32v24h-40v-24h-32v-32h-32v-32h-24v-32h24v-32h32v-32h32v-32h32V80h-32V48h-32z"/>
+  <path fill="#f58a39" d="M213 48h48v24h32v32h24v32h32v32h-32v32h-24v32h-32v24h-48v-24h-24v-32h-32v-32h24v-32h32v-32h24V96h-24V72h-24z"/>
+  <path fill="#ffe47a" d="M213 88h40v24h32v32h24v24h-24v32h-32v24h-40v-24h-24v-32h24v-32h24v-24h-24z"/>
+  <path fill="#fff2bf" d="M221 128h40v24h24v24h-24v24h-40v-24h-24v-24h24z"/>
+  <path fill="#fff0b0" d="M69 48h40v16h-24v24H69zM365 40h40v24h-24v24h-16zM29 208h48v16H45v24H29zM389 224h48v24h-24v24h-24zM173 8h24v32h-24zM293 280h24v32h-24z"/>
+  <path fill="#fff4d1" d="M213 148h64v24h-64z"/>
+  <text x="240" y="177" text-anchor="middle" font-family="monospace" font-size="40" font-weight="900" fill="#7a342b" stroke="#fff0b0" stroke-width="3" paint-order="stroke">BUM!</text>
+</svg>

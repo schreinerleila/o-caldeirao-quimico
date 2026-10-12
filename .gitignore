@@ -3,3 +3,5 @@ __pycache__/
 *.py[cod]
 .DS_Store
 tmp_markup_update.py
+static/images/boom.html
+static/images/boom_files/
