@@ -1,6 +1,10 @@
 /* Recompensas legíveis nas mãos dos personagens, com brilho e sombra de contato. */
-.held-potion{width:clamp(62px,7.5vw,96px);height:clamp(76px,10vw,116px);object-fit:contain;filter:drop-shadow(0 0 11px #ffe58b) drop-shadow(0 7px 6px #17100dcc);animation:rewardInHands .55s cubic-bezier(.2,.8,.25,1) both}
-.held-potion[data-reward-asset="amuletolobisohomem"]{width:clamp(66px,7vw,90px);height:clamp(66px,7vw,90px);clip-path:inset(0 0 12% 0)}
+.chapter-scene .booklayer:not(.open){display:none!important;visibility:hidden!important;pointer-events:none!important}
+.chapter-scene .booklayer:not(.open) *{pointer-events:none!important}
+.chapter-scene .result:not(.show){display:none!important;visibility:hidden!important;pointer-events:none!important}
+.chapter-scene .result:not(.show) *{pointer-events:none!important}
+.held-potion{width:clamp(86px,10vw,130px);height:clamp(106px,13vw,150px);object-fit:contain;filter:drop-shadow(0 0 11px #ffe58b) drop-shadow(0 7px 6px #17100dcc);animation:rewardInHands .55s cubic-bezier(.2,.8,.25,1) both}
+.held-potion[data-reward-asset="amuletolobisohomem"]{width:clamp(100px,10vw,132px);height:clamp(100px,10vw,132px);clip-path:none}
 @keyframes rewardInHands{0%{transform:scale(.45) rotate(-15deg)}65%{transform:scale(1.12) rotate(6deg)}100%{transform:scale(1) rotate(0)}}
 
 /* A carta e as recompensas mantêm pixels nítidos e alfa totalmente visível. */
@@ -193,8 +197,51 @@
 @media(max-width:800px){.speech.guest-outcome{top:clamp(78px,10vh,104px)!important;width:94vw!important}}
 
 /* O livro acompanha o centro e a altura do caldeirão na bancada. */
+.phase-element-card[hidden],.chapter-scene.controls-ready .phase-element-card{display:none!important}
+
+/* A porta usa as coordenadas da imagem da casa, inclusive durante o zoom. */
+.house-rig{position:absolute;z-index:4;aspect-ratio:948/955}
+.prologue-house-rig{left:50%;bottom:5%;width:min(43vw,590px,68vh);translate:-50% 0;scale:.94;transition:scale 6.2s cubic-bezier(.2,.45,.28,1)}
+.prologue-cutscene.camera-approach .prologue-house-rig{scale:1.08}
+.prologue-cutscene.entering-home .prologue-house-rig{scale:1.12;transition-duration:1.15s}
+.arrival-house-rig{right:7%;bottom:5%;width:min(41vw,550px,68vh);animation:arrivalHouseSettle 2.1s ease both}
+.house-rig .prologue-house,.house-rig .arrival-house{inset:0;width:100%;height:100%;transform:none!important;animation:none!important;object-fit:contain}
+.house-rig .prologue-doorway,.house-rig .arrival-door{left:40.4%;right:auto;top:63.2%;bottom:auto;width:17.2%;height:23.3%;box-sizing:border-box;transform:translateX(-50%);transform-origin:left center;border-width:2px;border-radius:48% 48% 2px 2px}
+.house-rig .prologue-doorlight{left:40.4%;top:64%;bottom:auto;width:17.2%;height:23%;filter:blur(10px)}
+.house-rig .arrival-doorlight{left:31.8%;right:auto;top:64%;bottom:auto;width:17.2%;height:23%;filter:blur(10px)}
+.house-rig:after{content:"";position:absolute;z-index:3;left:31.8%;top:63.2%;width:17.2%;height:23.3%;border-radius:48% 48% 2px 2px;background:linear-gradient(#120b13,#39241b);opacity:0;transition:opacity .4s;pointer-events:none}
+.door-opens .house-rig:after,.arrival-enters .house-rig:after{opacity:1}
+.arrival-enters .house-rig .arrival-door{transform:translateX(-50%) perspective(200px) rotateY(-70deg)}
+.arrival-knocks .house-rig .arrival-door{animation:doorKnockGrounded .28s ease-in-out 3}
+
+.chapter-scene[data-guest="mummy"] #guest{right:3%;bottom:1%;width:clamp(310px,38vw,480px);height:clamp(310px,38vw,480px)}
+.chapter-scene[data-guest="frank"] #guest{right:1%;bottom:1%;width:clamp(350px,41vw,520px);height:clamp(350px,41vw,520px);scale:-1 1}
+.chapter-scene[data-guest="frank"] .frank-armor{scale:-1 1}
+.chapter-scene .hero.dragon-guest,.chapter-scene .hero.dragon-guest.dragon-red{right:1%;bottom:20%;width:min(57vw,810px);height:min(69vh,680px);object-position:center bottom;z-index:5}
+.chapter-scene.dragon-scene .speech{top:64px!important;max-height:20vh;overflow:auto;z-index:24}
+.mummy-stench{position:absolute;z-index:15;pointer-events:none}
+.mummy-stench i{position:absolute;left:var(--bubble-x);top:var(--bubble-y);width:var(--bubble-size);aspect-ratio:1;border:3px solid #3d7527;border-radius:38%;background:radial-gradient(circle at 30% 26%,#dbff9c 0 12%,#8dcc4a 15% 42%,#567f2e 80%);box-shadow:3px 4px #183b2466,0 0 12px #91d85c66;animation:mummyOdorBubble 2.1s ease-out var(--bubble-delay) infinite}
+.failure-chapter-4{--fume-light:#cdf587;--fume-mid:#81af38;--fume-dark:#38562c}
+.failure-effect.consequence-phase.failure-chapter-4:before{background:radial-gradient(ellipse at 76% 55%,#84be4355,transparent 65%)}
+@keyframes mummyOdorBubble{0%{opacity:0;transform:translateY(15px) scale(.4)}25%{opacity:.9}75%{opacity:.85;transform:translateY(-50px) scale(1)}100%{opacity:0;transform:translateY(-85px) scale(.65)}}
+@media(max-width:800px){
+  .prologue-house-rig{width:min(82vw,57vh)}
+  .arrival-house-rig{right:2%;width:min(73vw,54vh)}
+  .chapter-scene[data-guest="mummy"] #guest{right:0;bottom:1%;width:min(57vw,350px);height:min(57vw,350px)}
+  .chapter-scene[data-guest="frank"] #guest{right:0;bottom:1%;width:min(58vw,365px);height:min(58vw,365px)}
+  .chapter-scene .hero.dragon-guest,.chapter-scene .hero.dragon-guest.dragon-red{right:1%;bottom:28%;width:min(77vw,560px);height:min(54vh,520px)}
+}
 .chapter-scene #book{left:50%;translate:-50% 0;bottom:calc(3% + clamp(180px,19vw,260px) + 42px);width:clamp(88px,8vw,112px);height:clamp(88px,8vw,112px)}
 .chapter-scene #book-label{left:50%;translate:-50% 0;bottom:calc(3% + clamp(180px,19vw,260px) + 7px);white-space:nowrap}
+.chapter-scene .speech.speech-luna,.chapter-scene .speech.speech-guest{left:var(--speech-left,16px)!important;top:var(--speech-top,64px)!important;bottom:auto!important;width:var(--speech-width,380px)!important;transform:none!important;max-height:none;overflow:visible;text-align:center;z-index:45}
+.chapter-scene .hero.dragon-guest.dragon-ashen{filter:grayscale(1) saturate(0) brightness(.78) drop-shadow(0 9px 7px #0d102088)!important}
+.chapter-scene .hero,.chapter-scene .ground-plane,.chapter-scene .room-art,.chapter-scene .room-prop,.failure-effect{pointer-events:none!important}
+.chapter-scene.dragon-scene:has(.speech:not(.hidden)) .dragon-guest{max-height:calc(100% - var(--dialogue-ceiling,250px) - 20%)}
+.chapter-scene.dragon-scene[data-game-state="ready"] #book,.chapter-scene.dragon-scene[data-game-state="ready"] #book-label{pointer-events:auto!important}
+/* O corpo do dragão passa à frente do ícone da bancada. A tabela aberta mantém sua camada própria. */
+.chapter-scene.dragon-scene .hero.dragon-guest{z-index:12}
+.chapter-scene.dragon-scene #book,.chapter-scene.dragon-scene #book-label{z-index:10;left:44%}
+.chapter-scene[data-game-state="victory-dialogue"] #book,.chapter-scene[data-game-state="victory-dialogue"] #book-label{display:none!important;visibility:hidden!important;pointer-events:none!important}
 @media(max-width:800px){
   .chapter-scene #book{bottom:calc(4% + clamp(140px,39vw,230px) + 42px);width:clamp(72px,15vw,96px);height:clamp(72px,15vw,96px)}
   .chapter-scene #book-label{bottom:calc(4% + clamp(140px,39vw,230px) + 7px)}

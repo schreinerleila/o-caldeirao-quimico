@@ -1,5 +1,5 @@
 import { elements, bySymbol, familyNames } from './data/elements.js?v=118-elements';
-import { phases } from './data/phases.js';
+import { phases } from './data/phases.js?v=amuleto-20261013';
 import { AudioEngine } from './effects/audio.js';
 
 const app = document.querySelector('#app');
@@ -13,12 +13,12 @@ let introCutsceneController = null;
 let interactionState = 'story';
 const savedPlayerName = (localStorage.getItem('playerName') || '').trim().slice(0, 24);
 let playerName = savedPlayerName || 'Aprendiz';
-function setInteractionState(state){interactionState=state;const sceneRoot=$('#scene');if(sceneRoot)sceneRoot.dataset.gameState=state;}
+function setInteractionState(state){interactionState=state;const sceneRoot=$('#scene');if(sceneRoot)sceneRoot.dataset.gameState=state;syncPhaseElementCard();}
 const $ = (selector) => document.querySelector(selector);
 const escapeHTML = (value) => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const phase = () => phases[chapter - 1];
 const cutoutNames = new Set('luna cat entregador wolf homemdasneves mumia vampire frankienstein reddragon bluedragon house letter candle candle2 candles3 boladecristal broom pumpkin rose bookshelf shelf decoracao amuletolobisohomem armadurafrankienstein drees pocao1 pocao2 pocao3 pocaodragao pocaohomemdasneves pocaomumia pocaovampiro caldeiraodecoracao clock moon'.split(' '));
-const art = (name) => `static/images/${cutoutNames.has(name) ? 'cutouts/' : ''}${name}.png`;
+const art = (name) => name==='reddragon' ? 'static/images/cutouts/reddragon-restored.png' : name==='homemdasneves' ? 'static/images/cutouts/homemdasneves-clean.png' : `static/images/${cutoutNames.has(name) ? 'cutouts/' : ''}${name}.png`;
 const familyColors = { nobres:'#bb8ad8', transicao:'#91a9c8', alcalinos:'#e88356', calcogenios:'#c8c469', halogenios:'#8cbf9c', carbono:'#a38abb', ametais:'#9bb3a5', 'alcalino-terrosos':'#cfaa78', 'familia-do-boro':'#dda98b', nitrogenio:'#8dabc1', lantanoides:'#d69cc1', actinoides:'#c78490' };
 const characters = { wolf:'wolf', snow:'homemdasneves', mummy:'mumia', vampire:'vampire', frank:'frankienstein', dragon:'bluedragon' };
 const prizes = { 1:'drees', 2:'amuletolobisohomem', 3:'pocaohomemdasneves', 4:'pocaomumia', 5:'pocaovampiro', 6:'armadurafrankienstein', 7:'pocaodragao' };
@@ -80,7 +80,7 @@ function openingCutscene(){
   introCutsceneController?.abort();document.querySelectorAll('.prologue-cutscene').forEach(node=>node.remove());app.inert=false;
   chapter=1;scene();
   const cutscene=document.createElement('section');cutscene.className='prologue-cutscene';cutscene.setAttribute('aria-label','Abertura da história');
-  cutscene.innerHTML=`<div class="prologue-camera"><div class="prologue-sky"></div><div class="prologue-forest"><i class="forest-tree tree-a"></i><i class="forest-tree tree-b"></i><i class="forest-tree tree-c"></i><i class="forest-tree tree-d"></i><i class="forest-tree tree-e"></i><i class="forest-tree tree-f"></i></div><div class="prologue-path"></div><img class="prologue-house" src="${art('house')}" alt="Casa de abóbora da Luna"><div class="prologue-doorway" aria-hidden="true"><i></i></div><span class="prologue-knock">TOC, TOC!</span><img class="prologue-courier" src="${art('entregador')}" alt="Mensageiro"><div class="prologue-doorlight"></div></div><div class="prologue-vignette"></div><p class="prologue-narration">Em um reino distante, havia uma jovem alquimista chamada Luna, que combinava magia e ciência para ajudar todos os habitantes do reino.</p><div class="prologue-dialogue" aria-live="polite"></div><button class="prologue-skip" type="button">Pular cena</button>`;
+  cutscene.innerHTML=`<div class="prologue-camera"><div class="prologue-sky"></div><div class="prologue-forest"><i class="forest-tree tree-a"></i><i class="forest-tree tree-b"></i><i class="forest-tree tree-c"></i><i class="forest-tree tree-d"></i><i class="forest-tree tree-e"></i><i class="forest-tree tree-f"></i></div><div class="prologue-path"></div><div class="house-rig prologue-house-rig"><img class="prologue-house" src="${art('house')}" alt="Casa de abóbora da Luna"><div class="prologue-doorway" aria-hidden="true"><i></i></div><div class="prologue-doorlight"></div></div><span class="prologue-knock">TOC, TOC!</span><img class="prologue-courier" src="${art('entregador')}" alt="Mensageiro"></div><div class="prologue-vignette"></div><p class="prologue-narration">Em um reino distante, havia uma jovem alquimista chamada Luna, que combinava magia e ciência para ajudar todos os habitantes do reino.</p><div class="prologue-dialogue" aria-live="polite"></div><button class="prologue-skip" type="button">Pular cena</button>`;
   document.body.append(cutscene);app.inert=true;audio.sfx('open');
   const narration=cutscene.querySelector('.prologue-narration'),dialogue=cutscene.querySelector('.prologue-dialogue');
   const controller=new AbortController();introCutsceneController=controller;
@@ -108,7 +108,7 @@ function storyLines(){
 }
 function scene(){
   const q=phase(),showReveal=revealNextScene;revealNextScene=false;beat=0;pick=[];
-  app.innerHTML=`<main class="story"><header class="top"><span>Capítulo ${q.id} de 7 · ${q.focus}</span><span class="chapter-progress">${'✦'.repeat(q.id)}${'·'.repeat(7-q.id)}</span><button id="sound" aria-label="Alternar som">♫ Som</button></header><section class="scene chapter-scene ${chapter===7?'dragon-scene':''}" id="scene" style="--chapter-color:${q.color}"><div class="room-art"></div><div class="ground-plane" aria-hidden="true"><i class="ground-shadow shadow-luna"></i><i class="ground-shadow shadow-guest"></i><i class="ground-shadow shadow-pot"></i><span class="floor-rug"></span><span class="floor-mushrooms" aria-hidden="true"></span><span class="floor-stones stones-left">◆ · ◆</span><span class="floor-stones stones-right">· ◆ ·</span><span class="floor-grass grass-left"></span><span class="floor-grass grass-right"></span></div>${showReveal?'<div class="scene-reveal" aria-hidden="true"></div>':''}<img class="room-prop shelf-prop" src="${art('bookshelf')}" alt=""><img class="room-prop candles-prop" src="${art('candles3')}" alt=""><img class="room-prop clock-prop" src="${art('clock')}" alt=""><img class="room-prop rose-prop" src="${art('rose')}" alt=""><img class="room-prop decor-prop" src="${art('boladecristal')}" alt=""><img class="room-prop broom-prop" src="${art('broom')}" alt=""><img class="room-prop pumpkin-prop" src="${art('pumpkin')}" alt=""><img class="room-prop cauldron-decor" src="${art('caldeiraodecoracao')}" alt=""><img class="hero luna" id="luna" src="${art('luna')}" alt="Luna, a bruxinha"><img class="hero guest ${chapter===1?'courier':''} ${chapter===4?'giant':''} ${chapter===3||chapter===6?'monster-large':''} ${chapter===7?'dragon-guest':''}" id="guest" src="${art(chapter===1?'entregador':characters[q.guestType]||'cat')}" alt="${chapter===1?'Mensageiro':q.guest}"><img class="dress-outcome" id="dress-outcome" src="${art('drees')}" alt="Vestido criado para Luna"><div class="story-letter" id="letter"><img src="${art('letter')}" alt=""></div><div class="pot-wrap" id="pot-wrap"><img class="pot" id="pot" src="${art('caldeirao')}" alt="Caldeirão mágico"><i class="bubble bubble-a"></i><i class="bubble bubble-b"></i></div><div class="ingredient-tray" id="ingredient-tray"></div><button class="mix outside-mix" id="mix" disabled>Misturar</button><button class="book-button" id="book" type="button" aria-label="Abrir o Grimório"><img src="${art('grimorio')}" alt=""></button><button class="book-label" id="book-label">Abrir Grimório</button><div class="phase-element-card" id="phase-element-card" aria-label="Exemplo de elemento: número atômico 6, símbolo C, Carbono, massa atômica 12,011"><span data-field="atomic"><small>Número atômico</small>6</span><b data-field="symbol"><small>Símbolo</small>C</b><strong data-field="name"><small>Nome</small>Carbono</strong><em data-field="mass"><small>Massa atômica</small>12,011</em></div><div class="speech" id="speech"><span class="speaker" id="who"></span><p id="say"></p></div><section class="booklayer" id="layer"></section><section class="result" id="result"><article class="card" id="card"></article></section><div class="mix-cinematic" id="mix-cinematic" aria-live="polite"></div><div class="ingredient-fly" id="fly"></div><span class="reaction-word" id="reaction-word"></span></section></main>`;
+  app.innerHTML=`<main class="story"><header class="top"><span>Capítulo ${q.id} de 7 · ${q.focus}</span><span class="chapter-progress">${'✦'.repeat(q.id)}${'·'.repeat(7-q.id)}</span><button id="sound" aria-label="Alternar som">♫ Som</button></header><section class="scene chapter-scene ${chapter===7?'dragon-scene':''}" id="scene" data-guest="${q.guestType}" style="--chapter-color:${q.color}"><div class="room-art"></div><div class="ground-plane" aria-hidden="true"><i class="ground-shadow shadow-luna"></i><i class="ground-shadow shadow-guest"></i><i class="ground-shadow shadow-pot"></i><span class="floor-rug"></span><span class="floor-mushrooms" aria-hidden="true"></span><span class="floor-stones stones-left">◆ · ◆</span><span class="floor-stones stones-right">· ◆ ·</span><span class="floor-grass grass-left"></span><span class="floor-grass grass-right"></span></div>${showReveal?'<div class="scene-reveal" aria-hidden="true"></div>':''}<img class="room-prop shelf-prop" src="${art('bookshelf')}" alt=""><img class="room-prop candles-prop" src="${art('candles3')}" alt=""><img class="room-prop clock-prop" src="${art('clock')}" alt=""><img class="room-prop rose-prop" src="${art('rose')}" alt=""><img class="room-prop decor-prop" src="${art('boladecristal')}" alt=""><img class="room-prop broom-prop" src="${art('broom')}" alt=""><img class="room-prop pumpkin-prop" src="${art('pumpkin')}" alt=""><img class="room-prop cauldron-decor" src="${art('caldeiraodecoracao')}" alt=""><img class="hero luna" id="luna" src="${art('luna')}" alt="Luna, a bruxinha"><img class="hero guest ${chapter===1?'courier':''} ${chapter===4?'giant':''} ${chapter===3||chapter===6?'monster-large':''} ${chapter===7?'dragon-guest':''}" id="guest" src="${art(chapter===1?'entregador':characters[q.guestType]||'cat')}" alt="${chapter===1?'Mensageiro':q.guest}"><img class="dress-outcome" id="dress-outcome" src="${art('drees')}" alt="Vestido criado para Luna"><div class="story-letter" id="letter"><img src="${art('letter')}" alt=""></div><div class="pot-wrap" id="pot-wrap"><img class="pot" id="pot" src="${art('caldeirao')}" alt="Caldeirão mágico"><i class="bubble bubble-a"></i><i class="bubble bubble-b"></i></div><div class="ingredient-tray" id="ingredient-tray"></div><button class="mix outside-mix" id="mix" disabled>Misturar</button><button class="book-button" id="book" type="button" aria-label="Abrir o Grimório"><img src="${art('grimorio')}" alt=""></button><button class="book-label" id="book-label">Abrir Grimório</button><div class="phase-element-card" id="phase-element-card" aria-label="Exemplo de elemento: número atômico 6, símbolo C, Carbono, massa atômica 12,011"><span data-field="atomic"><small>Número atômico</small>6</span><b data-field="symbol"><small>Símbolo</small>C</b><strong data-field="name"><small>Nome</small>Carbono</strong><em data-field="mass"><small>Massa atômica</small>12,011</em></div><div class="speech" id="speech"><span class="speaker" id="who"></span><p id="say"></p></div><section class="booklayer" id="layer"></section><section class="result" id="result"><article class="card" id="card"></article></section><div class="mix-cinematic" id="mix-cinematic" aria-live="polite"></div><div class="ingredient-fly" id="fly"></div><span class="reaction-word" id="reaction-word"></span></section></main>`;
   setInteractionState('dialogue');
   const restartButton=document.createElement('button');restartButton.type='button';restartButton.id='go-first-phase';restartButton.className='restart-phase';restartButton.textContent='↶ Voltar à Fase 1';restartButton.title='Recomeçar diretamente pela primeira fase';restartButton.onclick=()=>{chapter=1;progress.chapter=1;localStorage.setItem('cq-vintage-progress',JSON.stringify(progress));scene();};$('.top').insertBefore(restartButton,$('#sound'));
   if(showReveal)setTimeout(()=>$('.scene-reveal')?.remove(),850);
@@ -130,10 +130,30 @@ function bindDialogueAdvance(sceneRoot,advance){
   });
   $('#speech').addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();const speech=$('#speech');if(speech.dataset.failureReaction==='true'){speech.classList.add('hidden');speech.dataset.failureReaction='false';return;}advance();}});
 }
-function talk(){const l=storyLines()[beat],guest=$('#guest'),speech=$('#speech');$('#who').textContent=l[0]==='Narradora'?'':l[0];$('#say').textContent=l[1];const guestSpeaking=l[0]==='Mensageiro'||l[0]===phase().guest,shouldEnter=chapter===1?beat>=0:(beat>0||guestSpeaking);if(shouldEnter&&!guest.classList.contains('entered')){guest.classList.add('entered','arriving');setTimeout(()=>guest.classList.remove('arriving'),chapter===4?1650:1400);}else if(!shouldEnter)guest.classList.remove('entered','arriving');guest.classList.toggle('talking',guestSpeaking);$('#letter').classList.toggle('visible',chapter===1&&beat===1);$('#letter').classList.toggle('in-hand',chapter===1&&beat===1);$('#luna').classList.toggle('holding-letter',chapter===1&&beat===1);$('#luna').classList.toggle('talking',l[0]==='Luna');speech.classList.toggle('speech-guest',guestSpeaking);speech.classList.toggle('speech-luna',l[0]==='Luna');speech.classList.toggle('speech-narrator',!guestSpeaking&&l[0]!=='Luna');if(guestSpeaking||l[0]==='Luna'){const speaker=guestSpeaking?guest:$('#luna');requestAnimationFrame(()=>{const box=speaker.getBoundingClientRect(),width=window.innerWidth<=800?Math.min(340,window.innerWidth*.82):Math.min(390,window.innerWidth*.43);speech.style.width=`${width}px`;const left=guestSpeaking?Math.max(12,box.right-width):Math.max(12,box.left-16),highestCharacterTop=Math.min(...[...document.querySelectorAll('#scene .hero')].map(character=>character.getBoundingClientRect().top)),top=Math.max(46,Math.min(box.top,highestCharacterTop)-speech.offsetHeight-28);speech.style.left=`${Math.min(left,window.innerWidth-width-12)}px`;speech.style.top=`${top}px`;speech.style.bottom='auto';speech.style.transform='none';});}else{speech.style.left='50%';speech.style.top='68px';speech.style.bottom='auto';speech.style.width='min(650px,88%)';speech.style.transform='translateX(-50%)';}syncPhaseElementCard();}
-function syncPhaseElementCard(){const card=document.querySelector('#phase-element-card');if(!card)return;const show=chapter===1&&beat>=3&&beat<=7;card.classList.toggle('visible',show);const fields=beat===4?['atomic']:beat===5?['symbol']:beat===6?['name']:beat===7?['mass']:[];card.querySelectorAll('[data-field]').forEach(field=>field.classList.toggle('field-active',fields.includes(field.dataset.field)));if(!show)return;requestAnimationFrame(()=>{if(!card.isConnected||!card.classList.contains('visible'))return;const scene=document.querySelector('#scene'),speech=document.querySelector('#speech');if(!scene||!speech)return;const frame=scene.getBoundingClientRect(),dialog=speech.getBoundingClientRect(),width=card.offsetWidth,height=card.offsetHeight,gap=12,pad=16;let left=dialog.right+gap-frame.left,top=dialog.top-frame.top;if(left+width>frame.width-pad)left=dialog.left-frame.left-width-gap;if(left<pad||left+width>frame.width-pad){left=Math.max(pad,(frame.width-width)/2);top=dialog.bottom-frame.top+gap;if(top+height>frame.height-pad)top=Math.max(pad,dialog.top-frame.top-height-gap);}left=Math.max(pad,Math.min(left,frame.width-width-pad));top=Math.max(pad,Math.min(top,frame.height-height-pad));card.style.left=`${left}px`;card.style.top=`${top}px`;});}
-function next(){if(interactionState==='transition')return;if(chapter===1&&beat===2){const sceneRoot=$('#scene');beat=3;setInteractionState('transition');sceneRoot.classList.add('lesson-transition');audio.sfx('open');setTimeout(()=>{if(!sceneRoot.isConnected)return;sceneRoot.classList.remove('lesson-transition');sceneRoot.classList.add('focus');setInteractionState('story');talk();audio.sfx('click');},950);return;}if(beat<storyLines().length-1){beat++;talk();audio.sfx('click');return;}setInteractionState('ready');$('#speech').classList.add('hidden');$('#scene').classList.add('focus','controls-ready');$('#guest').classList.add('entered');$('#pot-wrap').classList.add('zoom');$('#book').classList.add('book-ready');$('#book-label').classList.add('visible');audio.sfx('open');}
-function transitionToScene(){const sceneRoot=$('#scene');if(!sceneRoot)return;sceneRoot.classList.remove('controls-ready');setInteractionState('transition');$('#result').classList.remove('show');const q=phase(),guestArt=art(characters[q.guestType]||'cat'),curtain=document.createElement('div');curtain.className=`chapter-transition transition-chapter-${chapter}`;const bat=`<svg class="arrival-bat" viewBox="0 0 120 70" aria-hidden="true"><path d="M60 28C49 9 36 8 26 2c5 12 3 20-9 12 2 17-5 25-16 23 14 18 28 20 43 13l16-11 16 11c15 7 29 5 43-13-11 2-18-6-16-23-12 8-14 0-9-12-10 6-23 7-34 26Z" fill="#17111f" stroke="#dab9ef" stroke-width="3" stroke-linejoin="round"/><circle cx="51" cy="34" r="2.4" fill="#ffe79a"/><circle cx="69" cy="34" r="2.4" fill="#ffe79a"/></svg>`;curtain.innerHTML=`<div class="arrival-stage"><div class="arrival-sky"></div><div class="arrival-trees"><i></i><i></i><i></i><i></i><i></i></div><div class="arrival-path"></div><img class="arrival-house" src="${art('house')}" alt="Casa de abóbora da Luna"><span class="arrival-door"></span><span class="arrival-caption">${chapter===4?'A Múmia vem pedir ajuda...':chapter===5?'Um morcego cruza a noite...':'Uma visita chega à casa de Luna...'}</span><div class="arrival-guest ${chapter===4?'arrival-mummy':''} ${chapter===5?'arrival-vampire':''}">${chapter===5?bat:''}<img src="${guestArt}" alt="${q.guest}"></div><span class="arrival-knock">TOC, TOC!</span><div class="arrival-doorlight"></div></div><span class="transition-title">✦ ${q.title} ✦</span>`;sceneRoot.append(curtain);audio.sfx('open');setTimeout(()=>curtain.classList.add('arrival-knocks'),2550);setTimeout(()=>{curtain.classList.add('arrival-enters');audio.sfx('click');},3350);setTimeout(()=>{revealNextScene=true;scene();},4650);}
+function talk(){const l=storyLines()[beat],guest=$('#guest'),speech=$('#speech');$('#who').textContent=l[0]==='Narradora'?'':l[0];$('#say').textContent=l[1];const guestSpeaking=l[0]==='Mensageiro'||l[0]===phase().guest,shouldEnter=chapter===1?beat>=0:(beat>0||guestSpeaking);if(shouldEnter&&!guest.classList.contains('entered')){guest.classList.add('entered','arriving');setTimeout(()=>guest.classList.remove('arriving'),chapter===4?1650:1400);}else if(!shouldEnter)guest.classList.remove('entered','arriving');guest.classList.toggle('talking',guestSpeaking);$('#letter').classList.toggle('visible',chapter===1&&beat===1);$('#letter').classList.toggle('in-hand',chapter===1&&beat===1);$('#luna').classList.toggle('holding-letter',chapter===1&&beat===1);$('#luna').classList.toggle('talking',l[0]==='Luna');speech.classList.toggle('speech-guest',guestSpeaking);speech.classList.toggle('speech-luna',l[0]==='Luna');speech.classList.toggle('speech-narrator',!guestSpeaking&&l[0]!=='Luna');if(guestSpeaking||l[0]==='Luna'){positionCharacterSpeech(guestSpeaking?guest:$('#luna'));}else{speech.style.left='50%';speech.style.top='68px';speech.style.bottom='auto';speech.style.width='min(650px,88%)';speech.style.transform='translateX(-50%)';}syncPhaseElementCard();}
+function positionCharacterSpeech(character){
+  const speech=$('#speech'),sceneRoot=$('#scene');if(!character||!speech||!sceneRoot)return;
+  speech.dataset.characterAnchor=character.id;
+  requestAnimationFrame(()=>{
+    if(!speech.isConnected||speech.classList.contains('hidden')||speech.dataset.characterAnchor!==character.id)return;
+    const width=Math.min(character.classList.contains('dragon-guest')?430:400,sceneRoot.clientWidth-32),pad=16;
+    // Layout coordinates remain stable while entry animations translate the sprite.
+    const center=character.offsetLeft+character.offsetWidth*.5;
+    const left=Math.max(pad,Math.min(center-width/2,sceneRoot.clientWidth-width-pad));
+    speech.style.setProperty('--speech-width',`${width}px`);
+    speech.style.setProperty('--speech-left',`${left}px`);
+    sceneRoot.style.setProperty('--dialogue-ceiling',`${speech.offsetHeight+88}px`);
+    const actors=[...sceneRoot.querySelectorAll('.hero')].filter(actor=>left<actor.offsetLeft+actor.offsetWidth+16&&left+width>actor.offsetLeft-16);
+    const ceiling=Math.min(...actors.map(actor=>actor.offsetTop),character.offsetTop);
+    const top=Math.max(64,ceiling-speech.offsetHeight-24);
+    speech.style.setProperty('--speech-top',`${top}px`);
+    Object.assign(speech.style,{left:`${left}px`,top:`${top}px`,bottom:'auto',width:`${width}px`,transform:'none'});
+  });
+}
+
+function syncPhaseElementCard(){const card=document.querySelector('#phase-element-card');if(!card)return;const show=chapter===1&&['dialogue','story'].includes(interactionState)&&beat>=3&&beat<=7;card.hidden=!show;card.classList.toggle('visible',show);const fields=beat===4?['atomic']:beat===5?['symbol']:beat===6?['name']:beat===7?['mass']:[];card.querySelectorAll('[data-field]').forEach(field=>field.classList.toggle('field-active',fields.includes(field.dataset.field)));if(!show)return;requestAnimationFrame(()=>{if(!card.isConnected||!card.classList.contains('visible'))return;const scene=document.querySelector('#scene'),speech=document.querySelector('#speech');if(!scene||!speech)return;const frame=scene.getBoundingClientRect(),dialog=speech.getBoundingClientRect(),width=card.offsetWidth,height=card.offsetHeight,gap=12,pad=16;let left=dialog.right+gap-frame.left,top=dialog.top-frame.top;if(left+width>frame.width-pad)left=dialog.left-frame.left-width-gap;if(left<pad||left+width>frame.width-pad){left=Math.max(pad,(frame.width-width)/2);top=dialog.bottom-frame.top+gap;if(top+height>frame.height-pad)top=Math.max(pad,dialog.top-frame.top-height-gap);}left=Math.max(pad,Math.min(left,frame.width-width-pad));top=Math.max(pad,Math.min(top,frame.height-height-pad));card.style.left=`${left}px`;card.style.top=`${top}px`;});}
+function next(){if(interactionState==='transition')return;if(chapter===1&&beat===2){const sceneRoot=$('#scene');beat=3;setInteractionState('transition');sceneRoot.classList.add('lesson-transition');audio.sfx('open');setTimeout(()=>{if(!sceneRoot.isConnected)return;sceneRoot.classList.remove('lesson-transition');sceneRoot.classList.add('focus');setInteractionState('story');talk();audio.sfx('click');},950);return;}if(beat<storyLines().length-1){beat++;talk();audio.sfx('click');return;}setInteractionState('ready');$('#speech').classList.add('hidden');$('#phase-element-card')?.remove();$('#scene').classList.add('focus','controls-ready');$('#guest').classList.add('entered');$('#pot-wrap').classList.add('zoom');$('#book').classList.add('book-ready');$('#book-label').classList.add('visible');audio.sfx('open');}
+function transitionToScene(){const sceneRoot=$('#scene');if(!sceneRoot)return;sceneRoot.classList.remove('controls-ready');setInteractionState('transition');$('#result').classList.remove('show');const q=phase(),guestArt=art(characters[q.guestType]||'cat'),curtain=document.createElement('div');curtain.className=`chapter-transition transition-chapter-${chapter}`;const bat=`<svg class="arrival-bat" viewBox="0 0 120 70" aria-hidden="true"><path d="M60 28C49 9 36 8 26 2c5 12 3 20-9 12 2 17-5 25-16 23 14 18 28 20 43 13l16-11 16 11c15 7 29 5 43-13-11 2-18-6-16-23-12 8-14 0-9-12-10 6-23 7-34 26Z" fill="#17111f" stroke="#dab9ef" stroke-width="3" stroke-linejoin="round"/><circle cx="51" cy="34" r="2.4" fill="#ffe79a"/><circle cx="69" cy="34" r="2.4" fill="#ffe79a"/></svg>`;curtain.innerHTML=`<div class="arrival-stage"><div class="arrival-sky"></div><div class="arrival-trees"><i></i><i></i><i></i><i></i><i></i></div><div class="arrival-path"></div><div class="house-rig arrival-house-rig"><img class="arrival-house" src="${art('house')}" alt="Casa de abóbora da Luna"><span class="arrival-door"></span><div class="arrival-doorlight"></div></div><span class="arrival-caption">${chapter===4?'A Múmia vem pedir ajuda...':chapter===5?'Um morcego cruza a noite...':'Uma visita chega à casa de Luna...'}</span><div class="arrival-guest ${chapter===4?'arrival-mummy':''} ${chapter===5?'arrival-vampire':''}">${chapter===5?bat:''}<img src="${guestArt}" alt="${q.guest}"></div><span class="arrival-knock">TOC, TOC!</span></div><span class="transition-title">✦ ${q.title} ✦</span>`;sceneRoot.append(curtain);audio.sfx('open');setTimeout(()=>curtain.classList.add('arrival-knocks'),2550);setTimeout(()=>{curtain.classList.add('arrival-enters');audio.sfx('click');},3350);setTimeout(()=>{revealNextScene=true;scene();},4650);}
 function drawElements(host,lesson=false){
   host.innerHTML=elements.map(e=>{const style=`grid-column:${e.column};grid-row:${e.row};--family-color:${familyColors[e.family]||'#b3a47e'}`;return `<button class="element" data-e="${e.symbol}" data-family="${e.family}" style="${style}" aria-label="${e.name}, ${e.symbol}, número atômico ${e.number}, massa ${e.mass}" title="${e.name} · ${e.mass}"><span class="n">${e.number}</span><b>${e.symbol}</b><small class="element-name">${e.name}</small><small class="element-mass">${e.mass} u</small></button>`;}).join('');
   if(lesson)host.querySelectorAll('[data-e]').forEach(button=>button.onclick=()=>{const e=bySymbol[button.dataset.e];const info=$('#lesson-info');info.innerHTML=`<b>${e.name} (${e.symbol})</b> · número atômico ${e.number} · massa ${e.mass} · ${familyNames[e.family]||e.family} · grupo ${e.group}, período ${e.period}.`;host.querySelectorAll('.element').forEach(b=>b.classList.toggle('lesson-selected',b===button));});
@@ -141,7 +161,11 @@ function drawElements(host,lesson=false){
 function closeBook(){const sceneRoot=$('#scene');sceneRoot.append($('#ingredient-tray'),$('#mix'));$('#layer').classList.remove('open');sceneRoot.classList.remove('book-open');if(interactionState!=='processing')setInteractionState('ready');}
 function toggleBook(){if($('#layer').classList.contains('open')){closeBook();return;}openBook();}
 function openBook(){
-  setInteractionState('book-open');
+  if(interactionState==='processing'||interactionState==='transition'||interactionState==='complete')return;
+  $('#speech')?.classList.add('hidden');
+  if($('#speech'))$('#speech').dataset.failureReaction='false';
+  app.inert=false;setInteractionState('book-open');
+  $('#scene').querySelectorAll('.mummy-stench').forEach(effect=>effect.remove());
   if(chapter===1){const luna=$('#luna');if(luna?.classList.contains('dressed')){luna.src=art('luna');luna.alt='Luna, a bruxinha';luna.classList.remove('dressed','dress-arrival');}}
   if(chapter===2){const guest=$('#guest');if(guest?.classList.contains('pincher-form')){guest.getAnimations().forEach(animation=>animation.cancel());guest.src=art('wolf');guest.alt='Lobisomem';guest.classList.remove('pincher-form');['transform','opacity','filter','visibility','animation','left','top','right','bottom','width','height'].forEach(property=>guest.style.removeProperty(property));}}
   $('#book')?.classList.remove('retry-pulse');$('#book-label')?.classList.remove('retry-pulse');
@@ -197,7 +221,7 @@ async function showMixCinematic(ok,selectedElements=pick.map(symbol=>bySymbol[sy
     comet.animate([{transform:'translate(-50%,-50%) scale(.4) rotate(-12deg)',opacity:0},{transform:'translate(-50%,-50%) scale(1.12) rotate(8deg)',opacity:1,offset:.18},{transform:`translate(calc(-50% + ${targetX-startX+spread}px),calc(-50% + ${targetY-startY}px)) scale(.22) rotate(22deg)`,opacity:0}],{duration:1050,delay:i*150,easing:'cubic-bezier(.2,.8,.25,1)',fill:'forwards'});
   });
   const flightTime=selected.length?1050+(selected.length-1)*150:400;
-  if(chapter>=2&&chapter<=5){const box=guest.getBoundingClientRect(),handY=chapter===2?.68:chapter===3?.62:chapter===4?.58:.62;await delay(flightTime);await flyRewardImage(prizes[chapter],{x:box.left+box.width*.5,y:box.top+box.height*handY},{hold:true});finishReward();return;}
+  if(chapter>=2&&chapter<=5){const box=guest.getBoundingClientRect(),handY=chapter===2?.53:chapter===3?.62:chapter===4?.58:.62;await delay(flightTime);await flyRewardImage(prizes[chapter],{x:box.left+box.width*.5,y:box.top+box.height*handY},{hold:true});finishReward();return;}
   setTimeout(finishReward,flightTime);
   function finishReward(){guest.classList.add('celebrate');$('#luna')?.classList.add('celebrate');audio.sfx('pop');setTimeout(()=>{$('#guest')?.classList.remove('celebrate');$('#luna')?.classList.remove('celebrate');overlay.remove();result(true,false);},850);}
 }
@@ -217,10 +241,20 @@ async function showFailureAnimation(){
   if(failedChapter===3)showMeltingConsequence(guest,sceneRoot);
   else if(failedChapter!==1)guest.classList.add('cartoon-hit');else $('#luna').classList.add('cartoon-hit');
   if(failedChapter===2)await transformWolfToPincher(guest);
+  if(failedChapter===7)guest.classList.add('dragon-ashen');
+  if(failedChapter===4)showMummyStench(guest,sceneRoot);
   if(failedChapter===6)animateArmorBreakdown(guest,sceneRoot);
   showFailureReaction(failedChapter);
   await delay(failedChapter===4?3000:2350);
   effect.remove();sceneRoot.classList.remove('failure-active',`failure-scene-${failedChapter}`);pot.classList.remove('fail','react');guest.classList.remove('cartoon-hit','melting');sceneRoot.querySelectorAll('.melting-vapor').forEach(vapor=>vapor.remove());$('#luna').classList.remove('cartoon-hit');
+}
+function showMummyStench(guest,sceneRoot){
+  sceneRoot.querySelectorAll('.mummy-stench').forEach(effect=>effect.remove());
+  const box=guest.getBoundingClientRect(),frame=sceneRoot.getBoundingClientRect(),effect=document.createElement('div');
+  effect.className='mummy-stench';effect.setAttribute('aria-hidden','true');
+  Object.assign(effect.style,{left:`${box.left-frame.left}px`,top:`${box.top-frame.top}px`,width:`${box.width}px`,height:`${box.height}px`});
+  effect.innerHTML=Array.from({length:9},(_,i)=>`<i style="--bubble-x:${8+(i*29)%83}%;--bubble-y:${15+(i*17)%65}%;--bubble-delay:${-i*.29}s;--bubble-size:${18+(i%3)*10}px"></i>`).join('');
+  sceneRoot.append(effect);
 }
 function showMeltingConsequence(guest,sceneRoot){
   const sprite=guest.getBoundingClientRect(),frame=sceneRoot.getBoundingClientRect(),vapor=document.createElement('div');
@@ -239,16 +273,18 @@ function showFailureReaction(failedChapter){
   };
   const speech=$('#speech');speech.classList.remove('hidden','speech-narrator','speech-guest','speech-luna');speech.classList.add('speech-luna','failure-reaction');speech.dataset.noTapAdvance='false';speech.dataset.failureReaction='true';
   $('#who').textContent='Luna';$('#say').textContent=reactions[failedChapter]||'A mistura não saiu como esperado. Vamos consultar o Grimório e tentar novamente!';
-  speech.style.left='50%';speech.style.top='clamp(68px, 9vh, 104px)';speech.style.bottom='auto';speech.style.width='min(820px,92%)';speech.style.transform='translateX(-50%)';
+  positionCharacterSpeech($('#luna'));
 }
 function releaseAfterFailure(){
   const sceneRoot=$('#scene'),guest=$('#guest'),pot=$('#pot'),book=$('#book'),label=$('#book-label');
   document.querySelectorAll('body > .failure-effect').forEach(effect=>effect.remove());
   if(sceneRoot){sceneRoot.classList.remove('failure-active');for(let id=1;id<=7;id++)sceneRoot.classList.remove(`failure-scene-${id}`);sceneRoot.style.pointerEvents='auto';}
+  document.querySelectorAll('body > .mix-cinematic').forEach(effect=>effect.remove());
+  sceneRoot?.classList.remove('book-open');sceneRoot?.classList.add('controls-ready');$('#layer')?.classList.remove('open');$('#result')?.classList.remove('show');
   pot?.classList.remove('fail','react');guest?.classList.remove('cartoon-hit','melting');sceneRoot?.querySelectorAll('.melting-vapor').forEach(vapor=>vapor.remove());$('#luna')?.classList.remove('cartoon-hit');
   pick=[];renderTray();setInteractionState('ready');app.inert=false;
-  if(book){book.style.pointerEvents='auto';book.style.visibility='visible';book.classList.add('book-ready','retry-pulse');}
-  if(label){label.style.pointerEvents='auto';label.classList.add('visible','retry-pulse');}
+  if(book){book.disabled=false;book.hidden=false;book.style.pointerEvents='auto';book.style.visibility='visible';book.classList.add('book-ready','retry-pulse');}
+  if(label){label.disabled=false;label.hidden=false;label.style.pointerEvents='auto';label.classList.add('visible','retry-pulse');}
   const speech=$('#speech');if(speech?.dataset.failureReaction!=='true')showFailureReaction(chapter);
 }
 async function transformWolfToPincher(guest){
@@ -274,6 +310,7 @@ function showNarratorOutcome(message,buttonText,onContinue,speaker='Narradora'){
   speech.dataset.noTapAdvance='true';
   speech.style.left='50%';speech.style.top='78px';speech.style.bottom='auto';speech.style.width='min(820px,90%)';speech.style.transform='translateX(-50%)';
   speech.innerHTML=`${guestOutcome?`<span class="speaker">${escapeHTML(speaker)}</span>`:''}<p>${escapeHTML(message)}</p><button class="story-choice" id="narrator-continue">${escapeHTML(buttonText)}</button>`;
+  if(guestOutcome)positionCharacterSpeech($('#guest'));
   speech.onclick=event=>event.stopPropagation();$('#narrator-continue').addEventListener('click',()=>{setInteractionState('transition');onContinue();});
 }
 function delay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
@@ -300,29 +337,53 @@ function flyRewardImage(asset,target,{hold=false}={}){
 }
 async function dressLuna({ragged=false}={}){
   const luna=$('#luna'),base=new Image(),dress=new Image();base.src=art('luna');dress.src=art('drees');
-  await Promise.all([base.decode().catch(()=>{}),dress.decode().catch(()=>{})]);
-  const canvas=document.createElement('canvas');canvas.width=base.naturalWidth||368;canvas.height=base.naturalHeight||512;const context=canvas.getContext('2d');
-  context.drawImage(base,0,0,canvas.width,canvas.height);
-  const garmentWidth=canvas.width*.59,garmentHeight=Math.min(garmentWidth*(dress.naturalHeight/dress.naturalWidth),canvas.height*.46),garmentX=(canvas.width-garmentWidth)/2,garmentTop=canvas.height*.436;
-  context.imageSmoothingEnabled=false;context.save();
-  if(ragged){
-    const x=garmentX,y=garmentTop,w=garmentWidth,h=garmentHeight;
-    context.beginPath();context.moveTo(x,y);context.lineTo(x+w,y);context.lineTo(x+w*.96,y+h*.6);context.lineTo(x+w*.84,y+h*.55);context.lineTo(x+w*.76,y+h*.78);context.lineTo(x+w*.64,y+h*.64);context.lineTo(x+w*.54,y+h*.86);context.lineTo(x+w*.42,y+h*.7);context.lineTo(x+w*.31,y+h*.95);context.lineTo(x+w*.2,y+h*.72);context.lineTo(x+w*.08,y+h*.82);context.closePath();context.clip();context.filter='grayscale(1) sepia(.62) contrast(1.18) brightness(.78)';
+  await Promise.all([base.decode(),dress.decode()]);
+  const canvas=document.createElement('canvas');canvas.width=base.naturalWidth;canvas.height=base.naturalHeight;
+  const context=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
+  context.imageSmoothingEnabled=false;context.drawImage(base,0,0);
+  // Fit the garment to the original sprite's neckline, waist and hem in sprite coordinates.
+  // The same composed sprite follows Luna's flip, breathing and celebration animations.
+  const seams=[[.465,.405,.642],[.515,.411,.665],[.605,.433,.655],[.635,.405,.690],[.705,.356,.736],[.805,.282,.813],[.866,.263,.837],[.901,.342,.761]];
+  const garment=document.createElement('canvas');garment.width=dress.naturalWidth;garment.height=dress.naturalHeight;
+  const ink=garment.getContext('2d');ink.drawImage(dress,0,0);
+  const pixels=ink.getImageData(0,0,garment.width,garment.height).data;
+  const rows=[];
+  for(let y=0;y<garment.height;y++){
+    let left=garment.width,right=-1;
+    for(let x=0;x<garment.width;x++)if(pixels[(y*garment.width+x)*4+3]>96){left=Math.min(left,x);right=x;}
+    if(right>=left)rows.push({y,left,width:right-left+1});
   }
-  context.drawImage(dress,garmentX,garmentTop,garmentWidth,garmentHeight);context.restore();
-  const redrawForeground=points=>{context.save();context.beginPath();context.moveTo(points[0][0],points[0][1]);for(const [x,y] of points.slice(1))context.lineTo(x,y);context.closePath();context.clip();context.drawImage(base,0,0,canvas.width,canvas.height);context.restore();};
-  // Put Luna's head, hands, sleeves and boots back in front of the garment.
-  redrawForeground([[0,0],[canvas.width,0],[canvas.width,canvas.height*.46],[canvas.width*.9,canvas.height*.49],[canvas.width*.83,canvas.height*.45],[canvas.width*.75,canvas.height*.47],[canvas.width*.67,canvas.height*.50],[canvas.width*.58,canvas.height*.46],[canvas.width*.43,canvas.height*.45],[canvas.width*.36,canvas.height*.49],[canvas.width*.29,canvas.height*.48],[canvas.width*.22,canvas.height*.46],[canvas.width*.15,canvas.height*.49],[0,canvas.height*.48]]);
-  redrawForeground([[canvas.width*.32,canvas.height*.47],[canvas.width*.45,canvas.height*.47],[canvas.width*.44,canvas.height*.65],[canvas.width*.36,canvas.height*.64],[canvas.width*.33,canvas.height*.56]]);
-  redrawForeground([[canvas.width*.68,canvas.height*.51],[canvas.width*.84,canvas.height*.55],[canvas.width*.98,canvas.height*.68],[canvas.width*.95,canvas.height*.74],[canvas.width*.84,canvas.height*.75],[canvas.width*.72,canvas.height*.68]]);
-  redrawForeground([[canvas.width*.26,canvas.height*.88],[canvas.width*.48,canvas.height*.89],[canvas.width*.47,canvas.height],[canvas.width*.27,canvas.height]]);
-  redrawForeground([[canvas.width*.59,canvas.height*.88],[canvas.width*.79,canvas.height*.88],[canvas.width*.79,canvas.height],[canvas.width*.57,canvas.height]]);
-  luna.classList.add('dress-arrival');luna.src=canvas.toDataURL('image/png');luna.alt=ragged?'Luna vestindo o vestido de pedra rasgado':'Luna vestindo o vestido leve e brilhante do baile';await delay(900);luna.classList.remove('dress-arrival');luna.classList.add('dressed');
+  const top=Math.round(seams[0][0]*h),bottom=Math.round(seams.at(-1)[0]*h);
+  context.save();
+  context.beginPath();seams.forEach(([y,left],index)=>index?context.lineTo(left*w,y*h):context.moveTo(left*w,y*h));
+  [...seams].reverse().forEach(([y,,right])=>context.lineTo(right*w,y*h));context.closePath();
+  // Replace the old robe rather than stacking a second skirt over it.
+  context.globalCompositeOperation='destination-out';context.fill();context.globalCompositeOperation='source-over';
+  if(ragged)context.filter='grayscale(1) sepia(.62) contrast(1.18) brightness(.78)';
+  for(let y=top;y<bottom;y++){
+    const t=(y-top)/(bottom-top),source=rows[Math.min(rows.length-1,Math.floor(t*rows.length))];
+    if(!source)continue;
+    const index=Math.max(0,seams.findIndex(point=>point[0]*h>y)-1),a=seams[index],b=seams[index+1]||a;
+    const blend=b[0]===a[0]?0:(y/h-a[0])/(b[0]-a[0]);
+    const left=(a[1]+(b[1]-a[1])*blend)*w,right=(a[2]+(b[2]-a[2])*blend)*w;
+    context.drawImage(garment,source.left,source.y,source.width,1,Math.round(left),y,Math.round(right-left),1);
+  }
+  context.restore();
+  const foreground=points=>{context.save();context.beginPath();points.forEach(([x,y],i)=>i?context.lineTo(x*w,y*h):context.moveTo(x*w,y*h));context.closePath();context.clip();context.drawImage(base,0,0);context.restore();};
+  // Restore hair/neck, the raised arm, the lowered sleeve/hand, and both boots.
+  foreground([[0,0],[1,0],[1,.465],[.64,.465],[.61,.48],[.43,.48],[.40,.465],[0,.465]]);
+  foreground([[0,.44],[.405,.44],[.405,.59],[.37,.63],[0,.65]]);
+  foreground([[.72,.465],[1,.465],[1,.73],[.80,.73],[.73,.64]]);
+  foreground([[0,.901],[1,.901],[1,1],[0,1]]);
+  luna.classList.add('dress-arrival');luna.src=canvas.toDataURL('image/png');
+  luna.alt=ragged?'Luna vestindo o vestido de pedra rasgado':'Luna vestindo o vestido leve e brilhante do baile';
+  await delay(900);luna.classList.remove('dress-arrival');luna.classList.add('dressed');
 }
 async function equipFrankenstein(){
   const guest=$('#guest'),scene=$('#scene'),pot=$('#pot'),g=guest.getBoundingClientRect(),s=scene.getBoundingClientRect(),p=pot.getBoundingClientRect();
-  const source=new Image();await new Promise(resolve=>{source.onload=resolve;source.onerror=resolve;source.src=art('armadurafrankienstein');if(source.complete&&source.naturalWidth)resolve();});
-  const armor=new Image();armor.className='frank-armor';armor.alt='Armadura de cristal em Frankenstein';
+  const base=new Image(),source=new Image();base.src=art('frankienstein');source.src=art('armadurafrankienstein');
+  await Promise.all([base.decode(),source.decode()]);
+  const armor=new Image();armor.className='frank-armor';armor.alt='Peças da armadura se encaixando no corpo de Frankenstein';
   try{
     const canvas=document.createElement('canvas');canvas.width=source.naturalWidth;canvas.height=source.naturalHeight;const context=canvas.getContext('2d',{willReadFrequently:true});context.drawImage(source,0,0);
     const pixels=context.getImageData(0,0,canvas.width,canvas.height),data=pixels.data,w=canvas.width,h=canvas.height,queue=new Int32Array(w*h),queued=new Uint8Array(w*h);let read=0,write=0;
@@ -333,20 +394,44 @@ async function equipFrankenstein(){
     while(read<write){const cell=queue[read++],i=cell*4;if(!isPaper(i))continue;data[i+3]=0;const x=cell%w,y=(cell/w)|0;if(x>0)enqueue(cell-1);if(x<w-1)enqueue(cell+1);if(y>0)enqueue(cell-w);if(y<h-1)enqueue(cell+w);}
     context.putImageData(pixels,0,0);armor.src=canvas.toDataURL('image/png');
   }catch{armor.src=source.src;}
-  const width=g.width*.72,height=g.height*.72,left=g.left-s.left+(g.width-width)/2,top=g.top-s.top+g.height*.13;
-  armor.style.left=`${left}px`;armor.style.top=`${top}px`;armor.style.width=`${width}px`;armor.style.height=`${height}px`;scene.append(armor);
-  const fromX=p.left+p.width/2-(s.left+left+width/2),fromY=p.top+p.height/2-(s.top+top+height/2);
-  await armor.animate([{transform:`translate(${fromX}px,${fromY}px) scale(.2) rotate(-18deg)`,opacity:0},{transform:'translate(0,0) scale(1.08) rotate(5deg)',opacity:1,offset:.78},{transform:'translate(0,0) scale(1) rotate(0)',opacity:1}],{duration:1550,easing:'cubic-bezier(.2,.8,.25,1)',fill:'forwards'}).finished.catch(()=>{});
-  guest.classList.add('armor-fitting');
-  await armor.animate([{transform:'translateY(-5px) scale(.91,.93)',filter:'drop-shadow(0 0 8px #fff2a6)'},{transform:'translateY(2px) scale(1.045,1.035)',filter:'drop-shadow(0 0 24px #9fe9ff)',offset:.56},{transform:'translateY(0) scale(1)',filter:'drop-shadow(0 0 12px #9fe9ff) drop-shadow(0 8px 6px #130b08aa)'}],{duration:760,easing:'cubic-bezier(.2,.8,.25,1)',fill:'forwards'}).finished.catch(()=>{});
-  armor.classList.add('armor-fitted');guest.classList.remove('armor-fitting');audio.sfx('pop');
+  await armor.decode();
+  const outfit=document.createElement('canvas');outfit.width=base.naturalWidth;outfit.height=base.naturalHeight;
+  const ink=outfit.getContext('2d'),w=outfit.width,h=outfit.height,aw=armor.naturalWidth,ah=armor.naturalHeight;
+  ink.imageSmoothingEnabled=false;
+  // Separate the breastplate/gauntlets and leggings; leave Frankenstein's face uncovered.
+  ink.drawImage(armor,0,ah*.355,aw,ah*.34,w*.025,h*.425,w*.95,h*.35);
+  ink.drawImage(armor,0,ah*.695,aw,ah*.305,w*.08,h*.775,w*.84,h*.205);
+  const fitted=document.createElement('canvas');fitted.width=w;fitted.height=h;
+  const body=fitted.getContext('2d');body.imageSmoothingEnabled=false;body.drawImage(base,0,0);
+  body.clearRect(0,h*.445,w,h*.535);body.drawImage(outfit,0,0);
+  body.drawImage(base,0,0,w,h*.445,0,0,w,h*.445);
+  // Both layers use the exact same sprite box and horizontal flip while dressing.
+  armor.src=outfit.toDataURL('image/png');
+  Object.assign(armor.style,{left:`${g.left-s.left}px`,top:`${g.top-s.top}px`,width:`${g.width}px`,height:`${g.height}px`});scene.append(armor);
+  const fromX=p.left+p.width/2-(g.left+g.width/2),fromY=p.top+p.height/2-(g.top+g.height*.62);
+  await armor.animate([{transform:`translate(${fromX}px,${fromY}px) scale(.2) rotate(-18deg)`,opacity:0},{transform:'translate(0,0) scale(1.04)',opacity:1,offset:.8},{transform:'translate(0,0) scale(1)',opacity:1}],{duration:1550,easing:'cubic-bezier(.2,.8,.25,1)',fill:'forwards'}).finished.catch(()=>{});
+  guest.src=fitted.toDataURL('image/png');guest.alt='Frankenstein vestindo a armadura de cristal';armor.remove();
+  guest.classList.add('armor-fitting');audio.sfx('pop');await delay(650);guest.classList.remove('armor-fitting');
   guest.classList.add('celebrate');audio.sfx('win');await delay(600);guest.classList.remove('celebrate');
 }
+async function fittedDragonTexture(){
+  // Normalize transparent margins so the red and blue forms share the same framing.
+  const image=new Image();image.src=art('reddragon');await image.decode();
+  const canvas=document.createElement('canvas');canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;
+  const ink=canvas.getContext('2d',{willReadFrequently:true});ink.drawImage(image,0,0);
+  const data=ink.getImageData(0,0,canvas.width,canvas.height).data;
+  let left=canvas.width,top=canvas.height,right=0,bottom=0;
+  for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++)if(data[(y*canvas.width+x)*4+3]>32){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
+  if(left>right)return image.src;
+  const framed=document.createElement('canvas');framed.width=right-left+1;framed.height=bottom-top+1;
+  const sprite=framed.getContext('2d');sprite.imageSmoothingEnabled=false;sprite.drawImage(image,left,top,framed.width,framed.height,0,0,framed.width,framed.height);
+  return framed.toDataURL('image/png');
+}
 async function dragonTransformation(){
-  const guest=$('#guest'),box=guest.getBoundingClientRect();
+  const guest=$('#guest');guest.classList.remove('dragon-ashen');const box=guest.getBoundingClientRect();
   await flyRewardImage('pocaodragao',{x:box.left+box.width*.49,y:box.top+box.height*.3});
   const colorShift=guest.animate([{filter:'brightness(1) saturate(1)',transform:'scale(1)'},{filter:'brightness(2.2) sepia(.9) saturate(2.4) drop-shadow(0 0 35px #fff1a8)',transform:'scale(1.09)'},{filter:'brightness(1.4) saturate(1.3) drop-shadow(0 0 24px #ff724c)',transform:'scale(1.02)'},{filter:'brightness(1) saturate(1.1)',transform:'scale(1)'}],{duration:1550,easing:'ease-in-out',fill:'forwards'});
-  await delay(620);guest.src=art('reddragon');guest.alt='Dragão de Cristal vermelho, recuperado pela poção';guest.classList.add('dragon-red');
+  await delay(620);guest.src=await fittedDragonTexture();guest.alt='Dragão de Cristal vermelho, recuperado pela poção';guest.classList.add('dragon-red');
   await colorShift.finished.catch(()=>{});audio.sfx('win');guest.classList.add('celebrate');await delay(600);guest.classList.remove('celebrate');
 }
 function showCertificate(){
